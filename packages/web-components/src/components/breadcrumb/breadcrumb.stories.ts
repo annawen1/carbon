@@ -12,8 +12,7 @@ import './breadcrumb';
 import './breadcrumb-item';
 import './breadcrumb-link';
 import './breadcrumb-overflow-menu';
-import '../overflow-menu/overflow-menu-body';
-import '../overflow-menu/overflow-menu-item';
+import '../overflow-menu/index';
 import './breadcrumb-skeleton';
 
 import { prefix } from '../../globals/settings';

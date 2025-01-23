@@ -111,14 +111,26 @@ $css--plex: true !default;
   @extend .#{$prefix}--overflow-menu--divider;
 }
 
+:host(#{$prefix}-overflow-menu[breadcrumb]) ::slotted(.#{$prefix}--overflow-menu__icon) {
+  transform: translateY(4px);
+
+  background: green;
+}
+
 :host(#{$prefix}-overflow-menu[breadcrumb]) {
   background: none;
   block-size: 1.125rem;
   box-shadow: none;
   inline-size: 1.25rem;
   min-block-size: 1.125rem;
-  outline: none;
-  transform: translateY(4px);
+
+  #{$prefix}-tooltip button{
+    position: relative;
+    block-size: 1.125rem;
+    inline-size: 1.25rem;
+    min-block-size: 1.125rem;
+    padding-inline: 0;
+  }
 
   :hover,
   :active,
