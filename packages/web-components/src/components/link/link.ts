@@ -7,11 +7,12 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { LitElement, html } from 'lit';
+import { LitElement, html, adoptStyles } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import styles from './link.scss?lit';
+import linkStyles from './global-link-styles.scss?lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
@@ -32,8 +33,13 @@ type LINK_SIZE_TYPE = (typeof LINK_SIZE)[keyof typeof LINK_SIZE];
  * @element cds-link
  * @csspart link The link.
  */
+
 @customElement(`${prefix}-link`)
 class CDSLink extends FocusMixin(LitElement) {
+  connectedCallback() {
+    super.connectedCallback();
+    adoptStyles(this.renderRoot as ShadowRoot, [linkStyles, styles]);
+  }
   /**
    * `true` if there is an icon.
    */
@@ -218,7 +224,6 @@ class CDSLink extends FocusMixin(LitElement) {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true,
   };
-  static styles = styles;
 }
 
 export default CDSLink;

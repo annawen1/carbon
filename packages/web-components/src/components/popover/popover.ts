@@ -6,11 +6,12 @@
  */
 
 import { classMap } from 'lit/directives/class-map.js';
-import { LitElement, html } from 'lit';
+import { LitElement, html, adoptStyles } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
 import styles from './popover.scss?lit';
+import popoverStyles from './global-popover-styles.scss?lit';
 import CDSPopoverContent from './popover-content';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
@@ -161,6 +162,7 @@ class CDSPopover extends HostListenerMixin(LitElement) {
 
   connectedCallback() {
     super.connectedCallback();
+    adoptStyles(this.renderRoot as ShadowRoot, [popoverStyles, styles]);
     document.addEventListener('click', this._handleOutsideClick);
   }
 
@@ -348,8 +350,6 @@ class CDSPopover extends HostListenerMixin(LitElement) {
   static get selectorPopoverContent() {
     return `${prefix}-popover-content`;
   }
-
-  static styles = styles;
 }
 
 export default CDSPopover;

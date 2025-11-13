@@ -5,11 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LitElement, html } from 'lit';
+import { LitElement, html, adoptStyles } from 'lit';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
 import styles from './popover.scss?lit';
+import popoverStyles from './global-popover-styles.scss?lit';
 import { POPOVER_BACKGROUND_TOKEN } from './defs';
 
 /**
@@ -79,6 +80,11 @@ class CDSPopoverContent extends LitElement {
   @property({ reflect: true })
   slot = 'content';
 
+  connectedCallback() {
+    super.connectedCallback();
+    adoptStyles(this.renderRoot as ShadowRoot, [popoverStyles, styles]);
+  }
+
   render() {
     return html`
       <span class="${prefix}--popover">
@@ -95,8 +101,6 @@ class CDSPopoverContent extends LitElement {
       </span>
     `;
   }
-
-  static styles = styles;
 }
 
 export default CDSPopoverContent;
