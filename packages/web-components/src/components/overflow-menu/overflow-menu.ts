@@ -19,7 +19,6 @@ import CDSOverflowMenuBody from './overflow-menu-body';
 import iconButtonStyles from '../icon-button/icon-button.scss?lit';
 import styles from './overflow-menu.scss?lit';
 import CDSIconButton from '../icon-button/icon-button';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { OVERFLOW_MENU_SIZE };
 
@@ -29,11 +28,12 @@ export { OVERFLOW_MENU_SIZE };
  * @element cds-overflow-menu
  * @slot icon - The icon for the trigger button.
  */
-@customElement(`${prefix}-overflow-menu`)
 class CDSOverflowMenu
   extends HostListenerMixin(FocusMixin(CDSIconButton))
   implements CDSFloatingMenuTrigger
 {
+  static is = `${prefix}-overflow-menu`;
+
   /**
    * The menu body.
    */

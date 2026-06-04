@@ -8,7 +8,7 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import { sendKeys } from '@web/test-runner-commands';
 import '@carbon/web-components/es/components/dropdown/index.js';
-import '@carbon/web-components/es/components/dropdown/dropdown-skeleton.js';
+import '@carbon/web-components/es/components/dropdown/index.js';
 import '@carbon/web-components/es/components/ai-label/index.js';
 
 const dropdown = html`

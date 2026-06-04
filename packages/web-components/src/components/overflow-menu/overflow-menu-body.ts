@@ -14,7 +14,6 @@ import { NAVIGATION_DIRECTION, OVERFLOW_MENU_SIZE } from './defs';
 
 import CDSOverflowMenuItem from './overflow-menu-item';
 import HostListener from '../../globals/decorators/host-listener';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { html } from 'lit';
 import { indexOf } from '../../globals/internal/collection-helpers';
 import { prefix } from '../../globals/settings';
@@ -41,8 +40,9 @@ const capIndex = (index: number, length: number) => {
  *
  * @element cds-overflow-menu-body
  */
-@customElement(`${prefix}-overflow-menu-body`)
 class CDSOverflowMenuBody extends CDSFloatingMenu {
+  static is = `${prefix}-overflow-menu-body`;
+
   /**
    * The menu direction.
    */

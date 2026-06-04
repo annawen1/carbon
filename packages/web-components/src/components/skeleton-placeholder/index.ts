@@ -5,4 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import './skeleton-placeholder';
+import { defineCustomElement } from '../../globals/internal/register';
+import CDSSkeletonPlaceholder from './skeleton-placeholder';
+
+export { CDSSkeletonPlaceholder };
+
+defineCustomElement(CDSSkeletonPlaceholder);

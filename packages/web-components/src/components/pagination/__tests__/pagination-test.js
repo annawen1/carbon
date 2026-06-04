@@ -8,7 +8,7 @@
 import { expect, fixture, html, oneEvent } from '@open-wc/testing';
 import '@carbon/web-components/es/components/pagination/index.js';
 import '@carbon/web-components/es/components/select/index.js';
-import '@carbon/web-components/es/components/select/select-item.js';
+import '@carbon/web-components/es/components/select/index.js';
 
 describe('cds-pagination', () => {
   it('should respect backward-text and forward-text attributes', async () => {

@@ -5,5 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import './loading';
+import { defineCustomElement } from '../../globals/internal/register';
+import CDSLoading from './loading';
 import './loading-icon';
+
+export { CDSLoading };
+
+defineCustomElement(CDSLoading);

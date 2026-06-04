@@ -7,7 +7,6 @@
 
 import { prefix } from '../../globals/settings';
 import { html } from 'lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSTextInput from '../text-input/text-input';
 import styles from './fluid-text-input.scss?lit';
 
@@ -16,8 +15,9 @@ import styles from './fluid-text-input.scss?lit';
  *
  * @element cds-fluid-text-input
  */
-@customElement(`${prefix}-fluid-text-input`)
 class CDSFluidTextInput extends CDSTextInput {
+  static is = `${prefix}-fluid-text-input`;
+
   connectedCallback() {
     this.setAttribute('isFluid', 'true');
     super.connectedCallback();

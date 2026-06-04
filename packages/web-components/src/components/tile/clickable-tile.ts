@@ -12,7 +12,6 @@ import { prefix } from '../../globals/settings';
 import CDSLink from '../link/link';
 import { TILE_COLOR_SCHEME } from './defs';
 import styles from './tile.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import AILabel24 from '@carbon/icons/es/ai-label/24.js';
 import ArrowRight16 from '@carbon/icons/es/arrow--right/16.js';
 import Error16 from '@carbon/icons/es/error/16.js';
@@ -24,8 +23,9 @@ import { isFeatureFlagEnabled } from '../feature-flags';
  *
  * @element cds-clickable-tile
  */
-@customElement(`${prefix}-clickable-tile`)
 class CDSClickableTile extends CDSLink {
+  static is = `${prefix}-clickable-tile`;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
   protected get _classes(): any {
     const { colorScheme, disabled, hasRoundedCorners, aiLabel, slug } = this;

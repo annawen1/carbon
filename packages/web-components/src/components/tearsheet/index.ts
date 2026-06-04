@@ -5,4 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import './tearsheet';
+import { defineCustomElement } from '../../globals/internal/register';
+import CDSTearsheet from './tearsheet';
+
+export { CDSTearsheet };
+
+defineCustomElement(CDSTearsheet);

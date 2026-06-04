@@ -17,7 +17,6 @@ import FocusMixin from '../../globals/mixins/focus';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { PAGINATION_SIZE, PAGINATION_TOOLTIP_POSITION } from './defs';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { prefix } from '../../globals/settings';
 import styles from './pagination.scss?lit';
@@ -30,8 +29,9 @@ import styles from './pagination.scss?lit';
  * @fires cds-pagination-changed-current - The custom event fired after the current page is changed from `<cds-pages-select>`.
  * @fires cds-page-sizes-select-changed - The custom event fired after the number of rows per page is changed from `<cds-page-sizes-select>`.
  */
-@customElement(`${prefix}-pagination`)
 class CDSPagination extends FocusMixin(HostListenerMixin(LitElement)) {
+  static is = `${prefix}-pagination`;
+
   @query(`${prefix}-select`)
   private _pageSizeSelect!: HTMLElement;
 

@@ -9,7 +9,6 @@ import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
 import { property, state } from 'lit/decorators.js';
 import styles from './menu.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { classMap } from 'lit/directives/class-map.js';
@@ -36,8 +35,9 @@ type activeItemType = {
   parent: HTMLElement | null;
 };
 
-@customElement(`${prefix}-menu`)
 class CDSMenu extends HostListenerMixin(LitElement) {
+  static is = `${prefix}-menu`;
+
   @provide({ context: MenuContext })
   @consume({ context: MenuContext })
   context = {

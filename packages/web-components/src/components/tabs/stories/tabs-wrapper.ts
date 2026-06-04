@@ -6,8 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property, state } from 'lit/decorators.js';
-import { carbonElement as customElement } from '../../../globals/decorators/carbon-element';
+import { property, state, customElement } from 'lit/decorators.js';
 import { prefix } from '../../../globals/settings';
 import { TABS_TYPE } from '../tabs';
 import { TABS_SIZE } from '../defs';

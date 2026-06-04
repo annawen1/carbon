@@ -8,7 +8,6 @@
 import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import styles from './shape-indicator.scss?lit';
 
@@ -62,8 +61,9 @@ const shapeMap = {
  * Shape Indicator.
  * @element cds-shape-indicator
  */
-@customElement(`${prefix}-shape-indicator`)
 class CDSShapeIndicator extends LitElement {
+  static is = `${prefix}-shape-indicator`;
+
   /**
    * Shape indicator size (12 or 14)
    */

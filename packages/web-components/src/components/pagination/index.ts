@@ -5,6 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import '../select/select-item';
-import '../select/select';
-import './pagination';
+import { defineCustomElement } from '../../globals/internal/register';
+import CDSPagination from './pagination';
+import '../select/index';
+
+export { CDSPagination };
+
+defineCustomElement(CDSPagination);

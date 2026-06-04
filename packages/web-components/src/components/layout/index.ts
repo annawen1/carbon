@@ -5,6 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export { CDSLayout, LAYOUT_SIZES, LAYOUT_DENSITIES } from './layout';
-export type { LayoutSize, LayoutDensity } from './layout';
-export { CDSLayoutConstraint } from './layout-constraint';
+import { defineCustomElement } from '../../globals/internal/register';
+import CDSLayout from './layout';
+import CDSLayoutConstraint from './layout-constraint';
+
+export { CDSLayout, CDSLayoutConstraint };
+
+defineCustomElement(CDSLayout);
+defineCustomElement(CDSLayoutConstraint);

@@ -7,7 +7,6 @@
 
 import { LitElement, html } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
@@ -43,8 +42,9 @@ export {
  * @slot label-text - The label text.
  * @slot validity-message - The validity message. If present and non-empty, this input shows the UI of its invalid state.
  */
-@customElement(`${prefix}-text-input`)
 class CDSTextInput extends ValidityMixin(FormMixin(LitElement)) {
+  static is = `${prefix}-text-input`;
+
   /**
    * `true` if there is an AI Label.
    */

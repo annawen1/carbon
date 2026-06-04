@@ -5,7 +5,24 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import './breadcrumb';
-import './breadcrumb-item';
-import './breadcrumb-link';
-import './breadcrumb-skeleton';
+import { defineCustomElement } from '../../globals/internal/register';
+import '../overflow-menu/index';
+import CDSBreadcrumb from './breadcrumb';
+import CDSBreadcrumbItem from './breadcrumb-item';
+import CDSBreadcrumbLink from './breadcrumb-link';
+import CDSBreadcrumbOverflowMenu from './breadcrumb-overflow-menu';
+import CDSBreadcrumbSkeleton from './breadcrumb-skeleton';
+
+export {
+  CDSBreadcrumb,
+  CDSBreadcrumbItem,
+  CDSBreadcrumbLink,
+  CDSBreadcrumbOverflowMenu,
+  CDSBreadcrumbSkeleton,
+};
+
+defineCustomElement(CDSBreadcrumb);
+defineCustomElement(CDSBreadcrumbItem);
+defineCustomElement(CDSBreadcrumbLink);
+defineCustomElement(CDSBreadcrumbOverflowMenu);
+defineCustomElement(CDSBreadcrumbSkeleton);

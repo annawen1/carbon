@@ -5,4 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import './side-panel';
+import { defineCustomElement } from '../../globals/internal/register';
+import CDSSidePanel from './side-panel';
+
+export { CDSSidePanel };
+
+defineCustomElement(CDSSidePanel);

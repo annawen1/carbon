@@ -17,7 +17,6 @@ import Handle from '../../globals/internal/handle';
 import '../copy-button/index';
 import '../copy/copy';
 import '../button/button';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
 export { CODE_SNIPPET_COLOR_SCHEME, CODE_SNIPPET_TYPE };
@@ -46,8 +45,9 @@ const observeResize = (observer: ResizeObserver, elem: Element) => {
  *
  * @element cds-code-snippet
  */
-@customElement(`${prefix}-code-snippet`)
 class CDSCodeSnippet extends FocusMixin(LitElement) {
+  static is = `${prefix}-code-snippet`;
+
   /**
    * `true` to expand multi-line variant of code snippet.
    */

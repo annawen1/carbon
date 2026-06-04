@@ -5,4 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import './heading';
+import { defineCustomElement } from '../../globals/internal/register';
+import CDSHeading, { CDSSection } from './heading';
+
+export { CDSHeading, CDSSection };
+
+defineCustomElement(CDSHeading);
+defineCustomElement(CDSSection);

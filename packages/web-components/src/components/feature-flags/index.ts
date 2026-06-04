@@ -28,8 +28,8 @@ import {
   FeatureFlags as GlobalFeatureFlags,
   createScope,
 } from '@carbon/feature-flags';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { LitElement, html } from 'lit';
+import { defineCustomElement } from '../../globals/internal/register';
 
 /**
  * Feature Flags
@@ -41,8 +41,9 @@ type FeatureFlags = Record<string, boolean>;
 const hasOwn = <T extends object>(obj: T, key: PropertyKey): key is keyof T =>
   Object.prototype.hasOwnProperty.call(obj, key);
 
-@customElement('feature-flags')
 class FeatureFlagsElement extends LitElement {
+  static is = 'feature-flags';
+
   private scope = GlobalFeatureFlags;
   private flags: FeatureFlags = {};
 
@@ -131,6 +132,8 @@ class FeatureFlagsElement extends LitElement {
 }
 
 export default FeatureFlagsElement;
+
+defineCustomElement(FeatureFlagsElement);
 
 // Utility functions
 

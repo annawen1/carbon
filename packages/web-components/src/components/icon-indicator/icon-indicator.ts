@@ -37,7 +37,6 @@ export { ICON_INDICATOR_KIND };
 
 import { iconLoader } from '../../globals/internal/icon-loader';
 import styles from './icon-indicator.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 const iconMap = {
   [ICON_INDICATOR_KIND.FAILED]: {
@@ -95,8 +94,9 @@ const iconMap = {
  *
  * @element cds-icon-indicator
  */
-@customElement(`${prefix}-icon-indicator`)
 class CDSIconIndicator extends LitElement {
+  static is = `${prefix}-icon-indicator`;
+
   /**
    * Icon indicator should be size 16 or 20
    */

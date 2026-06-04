@@ -18,7 +18,6 @@ import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { SIDE_PANEL_SIZE, SIDE_PANEL_PLACEMENT } from './defs';
 import { selectorTabbable } from '../../globals/settings';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import ArrowLeft16 from '@carbon/icons/es/arrow--left/16.js';
 import Close20 from '@carbon/icons/es/close/20.js';
 import { moderate02 } from '@carbon/motion';
@@ -103,8 +102,9 @@ function tryFocusElems(elems: NodeListOf<HTMLElement>, reverse: boolean) {
  * @fires cds-side-panel-closed - The custom event fired after this side-panel is closed upon a user gesture.
  * @fires cds-side-panel-navigate-back - custom event fired when clicking navigate back (available when step > 0)
  */
-@customElement(`${prefix}-side-panel`)
 class CDSSidePanel extends HostListenerMixin(LitElement) {
+  static is = `${prefix}-side-panel`;
+
   /**
    * The handle for observing resize of the parent element of this element.
    */
