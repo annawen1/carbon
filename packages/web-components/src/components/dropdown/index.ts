@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSDropdown from './dropdown';
 import CDSDropdownItem from './dropdown-item';
 import CDSDropdownSkeleton from './dropdown-skeleton';

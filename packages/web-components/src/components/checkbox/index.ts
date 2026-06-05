@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSCheckbox from './checkbox';
 import CDSCheckboxGroup from './checkbox-group';
 import CDSCheckboxSkeleton from './checkbox-skeleton';

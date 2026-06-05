@@ -6,6 +6,31 @@
  */
 
 /**
+ * Public registration API for `@carbon/web-components`
+ *
+ * Carbon's component classes are side-effect free: importing a class does not
+ * register it. Registration is the consumer's choice, performed with
+ * `defineCustomElement`. The auto-registering barrels
+ * (`@carbon/web-components/es/components/<name>`) call this for you under the
+ * default `cds-` tag names, so common use cases need nothing extra.
+ *
+ * To register a component under a custom tag name - i.e. to avoid a
+ * collision with another library that already defines `cds-button` - import the
+ * pure class and register it yourself:
+ *
+ * ```js
+ * import CDSButton from '@carbon/web-components/es/components/button/button.js';
+ * import { defineCustomElement } from '@carbon/web-components/es/globals/register.js';
+ *
+ * defineCustomElement(CDSButton, { name: 'cwc-button' }); // <cwc-button>
+ * ```
+ *
+ * Note: a custom element constructor may only be registered once per registry,
+ * so use the custom-name path with the pure class import rather than the
+ * auto-registering barrel (which already defines the default name).
+ */
+
+/**
  * Custom element constructor that carries the registered tag name
  * as a static `is` property
  *
@@ -28,7 +53,7 @@ export interface DefineCustomElementOptions {
   /**
    * The tag name to register under. Defaults to the class's static `is`
    *
-   * Pass a custom name to avoid global-registry collisions, e.g.
+   * Pass custom name to avoid global-registry collisions, e.g.
    * `defineCustomElement(CDSButton, { name: 'cwc-button' })`
    */
   name?: string;

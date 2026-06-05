@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSStructuredList from './structured-list';
 import CDSStructuredListBody from './structured-list-body';
 import CDSStructuredListCell from './structured-list-cell';

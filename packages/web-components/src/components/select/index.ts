@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSSelect from './select';
 import CDSSelectItem from './select-item';
 import CDSSelectItemGroup from './select-item-group';

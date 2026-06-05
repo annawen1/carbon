@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSMenu from './menu';
 import CDSmenuItem from './menu-item';
 import CDSmenuItemDivider from './menu-item-divider';

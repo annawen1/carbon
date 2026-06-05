@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import '../button/index';
 import CDSChatButton from './chat-button';
 import CDSChatButtonSkeleton from './chat-button-skeleton';

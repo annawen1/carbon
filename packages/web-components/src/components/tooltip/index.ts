@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSTooltip from './tooltip';
 import CDSTooltipContent from './tooltip-content';
 import CDSDefinitionTooltip from './definition-tooltip';

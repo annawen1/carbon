@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSClickableTile from './clickable-tile';
 import CDSExpandableTile from './expandable-tile';
 import CDSRadioTile from './radio-tile';

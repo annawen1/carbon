@@ -6,7 +6,8 @@
   "main": "es/index.js",
   "module": "es/index.js",
   "sideEffects": [
-    "**/index.js"
+    "**/index.js",
+    "**/index.ts"
   ],
   "repository": {
     "type": "git",

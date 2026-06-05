@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSButton from './button';
 import CDSButtonSetBase from './button-set-base';
 import CDSButtonSet from './button-set';

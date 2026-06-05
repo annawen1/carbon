@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSFluidMultiSelect from './fluid-multi-select';
 import CDSFluidMultiSelectSkeleton from './fluid-multi-select-skeleton';
 

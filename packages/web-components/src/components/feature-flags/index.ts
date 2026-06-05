@@ -29,7 +29,7 @@ import {
   createScope,
 } from '@carbon/feature-flags';
 import { LitElement, html } from 'lit';
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 
 /**
  * Feature Flags

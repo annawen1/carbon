@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSTag from './tag';
 import CDSDismissibleTag from './dismissible-tag';
 import CDSTagSkeleton from './tag-skeleton';

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import '../dialog/index';
 import CDSModal from './modal';
 import CDSModalBody from './modal-body';

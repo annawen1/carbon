@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { defineCustomElement } from '../../globals/internal/register';
+import { defineCustomElement } from '../../globals/register';
 import CDSOverflowMenu from './overflow-menu';
 import CDSOverflowMenuBody from './overflow-menu-body';
 import CDSOverflowMenuItem from './overflow-menu-item';
