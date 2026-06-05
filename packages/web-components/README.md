@@ -23,15 +23,15 @@ yarn add @carbon/web-components
 The `@carbon/web-components` package provides components for the Carbon Design
 System.
 
-To use a component, you can import it directly from the package:
+To use a component, import it from the package. Importing a component registers
+it under its standard `cds-*` tag name:
 
 ```javascript
-import '@carbon/web-components/es/components/dropdown/dropdown.js';
-import '@carbon/web-components/es/components/dropdown/dropdown-item.js';
+import '@carbon/web-components/es/components/dropdown/index.js';
 ```
 
-Once you've imported the component modules, you can use the components in the
-same manner as native HTML tags:
+Once you've imported the component, you can use it in the same manner as native
+HTML tags:
 
 ```html
 <cds-dropdown trigger-content="Select an item">
@@ -75,6 +75,112 @@ at version `v1.16.0`):
     </div>
   </body>
 </html>
+```
+
+### Other ways to register components
+
+#### Import class without registering anything
+
+```js
+import CDSButton from '@carbon/web-components/es/components/button/button.js';
+import { defineCustomElement } from '@carbon/web-components/es/globals/register.js';
+
+// now <cds-button /> is registered
+defineCustomElement(CDSButton);
+```
+
+#### Register under a custom tag name
+
+If `cds-button` is already taken on the page — for example an app using both
+`carbon-components-angular` and this package — register Carbon's element under a
+different name and use that tag instead:
+
+```javascript
+import CDSButton from '@carbon/web-components/es/components/button/button.js';
+import { defineCustomElement } from '@carbon/web-components/es/globals/register.js';
+
+// register as <cwc-button />
+defineCustomElement(CDSButton, { name: 'cwc-button' });
+```
+
+#### Run multiple versions on one page
+
+To keep the `cds-button` tag but isolate a version to part of the page, register
+into a scoped `CustomElementRegistry` attached to a shadow root:
+
+```javascript
+// polyfill needed until browsers ship scoped registries (Firefox 150+ has it)
+import '@webcomponents/scoped-custom-element-registry';
+import CDSButton from '@carbon/web-components/es/components/button/button.js';
+import { defineCustomElement } from '@carbon/web-components/es/globals/register.js';
+
+const registry = new CustomElementRegistry();
+defineCustomElement(CDSButton, { name: 'cds-button', registry });
+
+const shadow = host.attachShadow({ mode: 'open', registry });
+// resolves to your version
+shadow.innerHTML = '<cds-button></cds-button>';
+```
+
+Note: `{ name }` and `{ registry }` apply only to the elements you register
+yourself. A composite (e.g. a modal that renders `<cds-button>` in its own
+shadow DOM) resolves those internal tags against the global registry — so to
+re-prefix a whole component tree, use the prefix build below.
+
+#### Re-prefix the whole package (any prefix)
+
+To put every Carbon element — including the ones a composite renders internally
+— under your own prefix (e.g. to coexist with another Carbon version on a page
+you don't control), generate a prefixed build:
+
+```bash
+npx -p @carbon/web-components create-prefixed-build --prefix foo --out ./vendor/carbon-foo
+```
+
+Then import from the generated directory; everything is `foo-*`:
+
+```javascript
+import './vendor/carbon-foo/components/modal/index.js';
+// <foo-modal>, internally <foo-button>
+```
+
+This is a build-time rename — no polyfill, no runtime, no load-order constraints
+— so it covers composites. Pick a unique prefix to avoid clashing with other
+Carbon copies. Shared `--cds` design tokens are preserved so theming stays
+consistent.
+
+Write the output into your project (commit it, or regenerate it as part of your
+build) — not into `node_modules`, which is ephemeral and read-only under pnpm /
+Yarn PnP. If you'd rather import it with a package-style specifier, alias it in
+your bundler:
+
+```js
+// vite/webpack: '@carbon/web-components/foo' -> './vendor/carbon-foo'
+```
+
+> [!IMPORTANT] > **Deprecated:** the `es-custom` build (`cds-custom-*` elements)
+> is deprecated and will be removed in `v3.0.0` in favor of this approach.
+
+#### What you can and cannot do
+
+| Goal                                                  | Supported                                           |
+| ----------------------------------------------------- | --------------------------------------------------- |
+| Use components under the default `cds-*` tags         | ✅ import the component (`.../index.js`)            |
+| Import a class without registering it                 | ✅ import the class file (`.../button.js`)          |
+| Register under a custom tag to avoid a collision      | ✅ `defineCustomElement(Class, { name })`           |
+| Run multiple versions on one page (inside shadow DOM) | ✅ `defineCustomElement(Class, { name, registry })` |
+| Re-prefix a whole tree, including composite internals | ✅ `create-prefixed-build` (prefix build above)     |
+
+**CDN users:** The pre-built CDN bundles (`*.min.js`) register their elements
+under the default `cds-*` tags on load, and do not expose the class or
+`defineCustomElement`. The only way to use custom tags from the CDN is to import
+the ES modules from an ESM CDN instead:
+
+```js
+import CDSButton from 'https://esm.sh/@carbon/web-components/es/components/button/button.js';
+import { defineCustomElement } from 'https://esm.sh/@carbon/web-components/es/globals/register.js';
+
+defineCustomElement(CDSButton, { name: 'cwc-button' });
 ```
 
 ### Other usage guides

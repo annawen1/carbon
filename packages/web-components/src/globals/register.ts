@@ -57,13 +57,26 @@ export interface DefineCustomElementOptions {
    * `defineCustomElement(CDSButton, { name: 'cwc-button' })`
    */
   name?: string;
-  // CustomElementRegistry here
+  /**
+   * The registry to define the element in. Defaults to the global
+   * `customElements`.
+   *
+   * Pass a scoped `CustomElementRegistry` (created with
+   * `new CustomElementRegistry()` and attached to a shadow root via
+   * `attachShadow({ customElementRegistry })`) to isolate registration from
+   * global namespace — e.g. to run multiple versions, or a different
+   * prefix, of Carbon elements on the same page without collisions. Requires
+   * native support (Firefox 150+) or the
+   * `@webcomponents/scoped-custom-element-registry` polyfill.
+   */
+  registry?: CustomElementRegistry;
 }
 
 /**
- * Register custom element class in the global registry, under `options.name`
- * or its static `is` by default. Idempotent - defining an existing tag is a
- * no-op. Called by the registering barrels so importing a class stays pure
+ * Register a custom element class, under `options.name` (or its static `is` by
+ * default) in `options.registry` (or the global `customElements` by default).
+ * Idempotent - defining an existing tag in the registry is a no-op. Called by
+ * the registering barrels so importing a class stays pure.
  *
  * @param clazz The custom element class to register
  * @param options Registration options
@@ -73,9 +86,10 @@ export const defineCustomElement = <T extends CarbonCustomElementConstructor>(
   clazz: T,
   options: DefineCustomElementOptions = {}
 ): T => {
+  const registry = options.registry ?? customElements;
   const name = options.name ?? clazz.is;
-  if (name && !customElements.get(name)) {
-    customElements.define(name, clazz as unknown as CustomElementConstructor);
+  if (name && !registry.get(name)) {
+    registry.define(name, clazz as unknown as CustomElementConstructor);
   }
   return clazz;
 };
