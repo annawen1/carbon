@@ -41,6 +41,11 @@ type FeatureFlags = Record<string, boolean>;
 const hasOwn = <T extends object>(obj: T, key: PropertyKey): key is keyof T =>
   Object.prototype.hasOwnProperty.call(obj, key);
 
+/**
+ * Feature Flags
+ *
+ * @element feature-flags
+ */
 class FeatureFlagsElement extends LitElement {
   static is = 'feature-flags';
 

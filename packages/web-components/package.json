@@ -5,6 +5,9 @@
   "license": "Apache-2.0",
   "main": "es/index.js",
   "module": "es/index.js",
+  "sideEffects": [
+    "**/index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/carbon-design-system/carbon.git",
