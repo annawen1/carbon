@@ -196,6 +196,31 @@ async function postBuild() {
         await fs.promises.writeFile(file, updatedContent);
       })
     );
+
+    // Deprecate the `es-custom` build, replaced by runtime
+    // user-controlled naming (`defineCustomElement(Class, { name })`) and
+    // scoped custom element registries.
+    const registerFile = path.resolve(targetDir, 'globals/register.js');
+    if (await fs.pathExists(registerFile)) {
+      const notice = [
+        '',
+        '// @deprecated The `es-custom` build is deprecated and will be removed in v3.0.0.',
+        'if (typeof console !== "undefined" && !globalThis.__CDS_ES_CUSTOM_DEPRECATED__) {',
+        '  globalThis.__CDS_ES_CUSTOM_DEPRECATED__ = true;',
+        '  console.warn(',
+        '    "[@carbon/web-components] The \\"es-custom\\" build (cds-custom-* elements) is deprecated and will be removed in v3.0.0. " +',
+        '    "Register Carbon elements under your own tag name instead, e.g. " +',
+        '    "defineCustomElement(CDSButton, { name: \\"cds-custom-button\\" }) using the pure class import."',
+        '  );',
+        '}',
+        '',
+      ].join('\n');
+      await fs.promises.appendFile(registerFile, notice);
+    }
+
+    console.warn(
+      '⚠️  [deprecation] The `es-custom` build is deprecated and will be removed in v3.0.0 (replaced by user-controlled naming and scoped registries).'
+    );
   }
 }
 
