@@ -4,6 +4,14 @@ const chromeLaunchArgs = process.env.CI
   ? ['--no-sandbox', '--disable-setuid-sandbox']
   : [];
 
+const LIT_DEV_MODE_WARNING = 'Lit is in dev mode';
+
+function filterBrowserLogs(log) {
+  return !log.args.some(
+    (arg) => typeof arg === 'string' && arg.includes(LIT_DEV_MODE_WARNING)
+  );
+}
+
 export default {
   browsers: [
     puppeteerLauncher({
@@ -17,6 +25,7 @@ export default {
     extensions: ['.js', '.ts'],
   },
   concurrency: 1,
+  filterBrowserLogs,
 
   rootDir: '.',
 
