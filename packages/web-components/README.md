@@ -183,8 +183,11 @@ module.exports = {
 };
 ```
 
-> [!IMPORTANT] > **Deprecated:** the `es-custom` build (`cds-custom-*` elements)
-> is deprecated and will be removed in `v3.0.0` in favor of this approach.
+<!-- proseWrap mangles multi-line GitHub alerts; see https://github.com/prettier/prettier/issues/15479 -->
+<!-- prettier-ignore -->
+> [!IMPORTANT]
+> **Deprecated:** the `es-custom` build (`cds-custom-*` elements) is deprecated
+> and will be removed in `v3.0.0` in favor of this approach.
 
 #### What you can and cannot do
 
