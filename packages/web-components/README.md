@@ -151,11 +151,36 @@ consistent.
 
 Write the output into your project (commit it, or regenerate it as part of your
 build) — not into `node_modules`, which is ephemeral and read-only under pnpm /
-Yarn PnP. If you'd rather import it with a package-style specifier, alias it in
-your bundler:
+Yarn PnP.
+
+To import it with a package-style specifier instead of a relative path, add a
+bundler alias so `import 'carbon-foo/components/button/index.js'` resolves to
+the generated directory:
 
 ```js
-// vite/webpack: '@carbon/web-components/foo' -> './vendor/carbon-foo'
+// vite.config.js
+import { resolve } from 'node:path';
+
+export default {
+  resolve: {
+    alias: {
+      'carbon-foo': resolve(__dirname, 'vendor/carbon-foo'),
+    },
+  },
+};
+```
+
+```js
+// webpack.config.js
+const path = require('node:path');
+
+module.exports = {
+  resolve: {
+    alias: {
+      'carbon-foo': path.resolve(__dirname, 'vendor/carbon-foo'),
+    },
+  },
+};
 ```
 
 > [!IMPORTANT] > **Deprecated:** the `es-custom` build (`cds-custom-*` elements)

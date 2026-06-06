@@ -1,0 +1,54 @@
+<!--
+Copyright IBM Corp. 2026
+
+This source code is licensed under the Apache-2.0 license found in the
+LICENSE file in the root directory of this source tree.
+-->
+
+<html>
+  <head>
+    <title>Scoped registry</title>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"
+    />
+    <link rel="stylesheet" href="src/styles.scss" />
+    <script type="module">
+      // polyfill must load before any custom element or lit module evaluates
+      import "@webcomponents/scoped-custom-element-registry";
+      import CDSButton from "@carbon/web-components/es/components/button/button.js";
+      import { defineCustomElement } from "@carbon/web-components/es/globals/register.js";
+
+      // register into scoped registry rather than global
+      const registry = new CustomElementRegistry();
+      defineCustomElement(CDSButton, { name: "cds-button", registry });
+
+      // attach to shadow root
+      const host = document.querySelector("#scoped-host");
+      const shadow = host.attachShadow({ mode: "open", registry });
+      shadow.innerHTML = "<cds-button>Scoped cds-button</cds-button>";
+
+      // global registry not touched
+      document.querySelector("#global-status").textContent = customElements.get(
+        "cds-button",
+      )
+        ? "global cds-button: registered"
+        : "global cds-button: not registered (isolated to shadow root)";
+    </script>
+  </head>
+  <body>
+    <h3>Scoped registry</h3>
+    <p>
+      Keep <code>cds-button</code> tag registered into a scoped
+      <code>CustomElementRegistry</code> attached to a shadow root — it resolves
+      only inside that subtree, and the global registry is left untouched.
+      Requires the <code>@webcomponents/scoped-custom-element-registry</code>
+      polyfill (loaded first).
+    </p>
+    <div class="demo">
+      <div id="scoped-host"></div>
+      <p id="global-status"></p>
+    </div>
+  </body>
+</html>

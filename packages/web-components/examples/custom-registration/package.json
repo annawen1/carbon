@@ -1,0 +1,24 @@
+{
+  "name": "carbon-web-components-custom-registration-example",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Custom registration examples for @carbon/web-components (default, defineCustomElement, custom name, scoped registry, prefixed build).",
+  "license": "Apache-2",
+  "main": "default.html",
+  "scripts": {
+    "generate:prefix": "create-prefixed-build --prefix foo --out ./vendor/carbon-foo",
+    "dev": "vite",
+    "build": "npm run generate:prefix && vite build",
+    "clean": "rimraf node_modules dist .cache vendor"
+  },
+  "dependencies": {
+    "@carbon/styles": "^1.108.0",
+    "@carbon/web-components": "latest",
+    "@webcomponents/scoped-custom-element-registry": "^0.0.10",
+    "sass": "^1.93.2"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "vite": "^7.1.2"
+  }
+}

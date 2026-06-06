@@ -1,0 +1,37 @@
+<!--
+Copyright IBM Corp. 2026
+
+This source code is licensed under the Apache-2.0 license found in the
+LICENSE file in the root directory of this source tree.
+-->
+
+<html>
+  <head>
+    <title>Default registration</title>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"
+    />
+    <link rel="stylesheet" href="src/styles.scss" />
+    <style>
+      cds-button:not(:defined) {
+        visibility: hidden;
+      }
+    </style>
+    <script type="module">
+      // importing component barrel registers component automatically
+      import "@carbon/web-components/es/components/button/index.js";
+    </script>
+  </head>
+  <body>
+    <h3>Default registration</h3>
+    <p>
+      Default usage — importing a component's <code>index.js</code> registers it
+      under the standard <code>cds-</code> tag.
+    </p>
+    <div class="demo">
+      <cds-button>Default cds-button</cds-button>
+    </div>
+  </body>
+</html>

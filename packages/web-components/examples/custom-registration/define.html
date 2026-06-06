@@ -1,0 +1,41 @@
+<!--
+Copyright IBM Corp. 2026
+
+This source code is licensed under the Apache-2.0 license found in the
+LICENSE file in the root directory of this source tree.
+-->
+
+<html>
+  <head>
+    <title>Explicit registration</title>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"
+    />
+    <link rel="stylesheet" href="src/styles.scss" />
+    <style>
+      cds-button:not(:defined) {
+        visibility: hidden;
+      }
+    </style>
+    <script type="module">
+      // importing class file registers nothing (side-effect free)
+      import CDSButton from "@carbon/web-components/es/components/button/button.js";
+      import { defineCustomElement } from "@carbon/web-components/es/globals/register.js";
+
+      // register explicity under default tag `cds-button`
+      defineCustomElement(CDSButton);
+    </script>
+  </head>
+  <body>
+    <h3>Explicit registration</h3>
+    <p>
+      The component class is side-effect free — importing it registers nothing.
+      You register it yourself with <code>defineCustomElement</code>.
+    </p>
+    <div class="demo">
+      <cds-button>Explicitly registered cds-button</cds-button>
+    </div>
+  </body>
+</html>

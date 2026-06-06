@@ -1,0 +1,42 @@
+<!--
+Copyright IBM Corp. 2026
+
+This source code is licensed under the Apache-2.0 license found in the
+LICENSE file in the root directory of this source tree.
+-->
+
+<html>
+  <head>
+    <title>Custom tag name</title>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"
+    />
+    <link rel="stylesheet" href="src/styles.scss" />
+    <style>
+      cwc-button:not(:defined) {
+        visibility: hidden;
+      }
+    </style>
+    <script type="module">
+      import CDSButton from "@carbon/web-components/es/components/button/button.js";
+      import { defineCustomElement } from "@carbon/web-components/es/globals/register.js";
+
+      // register custom tag name. use pure class import (not barrel), since
+      // constructor can only be registered once per registry
+      defineCustomElement(CDSButton, { name: "cwc-button" });
+    </script>
+  </head>
+  <body>
+    <h3>Custom tag name</h3>
+    <p>
+      Register a Carbon component under your own tag (<code>cwc-button</code>
+      here) to avoid a collision with an existing <code>cds-button</code> on the
+      page.
+    </p>
+    <div class="demo">
+      <cwc-button>Custom-named cwc-button</cwc-button>
+    </div>
+  </body>
+</html>
