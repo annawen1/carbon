@@ -6,6 +6,7 @@
 //
 
 @use 'sass:map';
+@use 'sass:list';
 
 /// Common component easings
 /// @type Map
@@ -97,7 +98,7 @@ $surfaces: (
 
   $surface: map.get($surfaces, $name);
 
-  @if $property == null {
+  @if not($property) {
     @return $surface;
   }
 
@@ -108,6 +109,64 @@ $surfaces: (
   @return map.get($surface, $property);
 }
 
+/// Apply styles for a named motion surface state
+/// @param {String} $name - The name of the surface to apply
+/// @param {String} $state - The surface state to apply
+/// @param {Boolean} $reduced-motion [false] - Whether to apply the reduced motion variant
+/// @access public
+/// @group @carbon/motion
+@mixin surface-state($name, $state, $reduced-motion: false) {
+  $surface: surface($name);
+
+  @if map.get($surface, kind) == invoke {
+    $state-properties: map.get($surface, $state);
+
+    @if not($state-properties) {
+      @error 'Unable to find a state named #{$state} for the motion surface #{$name}.';
+    }
+
+    @if $reduced-motion {
+      clip-path: none;
+      opacity: map.get($state-properties, opacity);
+
+      @if $state == enter {
+        transition:
+          opacity $duration-slow-01 motion(standard, expressive),
+          visibility 0ms linear;
+      } @else {
+        transition:
+          opacity $duration-slow-01 motion(standard, expressive),
+          visibility 0ms linear $duration-slow-01;
+      }
+    } @else {
+      $easing: map.get($surface, #{$state}-easing);
+
+      clip-path: map.get($state-properties, clip-path);
+      opacity: map.get($state-properties, opacity);
+
+      @if $state == enter {
+        transition:
+          opacity
+            $duration-slow-01
+            motion(list.nth($easing, 1), list.nth($easing, 2)),
+          clip-path
+            $duration-slow-01
+            motion(list.nth($easing, 1), list.nth($easing, 2)),
+          visibility 0ms linear;
+      } @else {
+        transition:
+          opacity
+            $duration-slow-01
+            motion(list.nth($easing, 1), list.nth($easing, 2)),
+          clip-path
+            $duration-slow-01
+            motion(list.nth($easing, 1), list.nth($easing, 2)),
+          visibility 0ms linear $duration-slow-01;
+      }
+    }
+  }
+}
+
 /// Apply native CSS for a named motion surface
 /// @param {String} $name - The name of the surface to apply
 /// @access public
@@ -116,58 +175,33 @@ $surfaces: (
   $surface: surface($name);
 
   @if map.get($surface, kind) == invoke {
-    $enter: map.get($surface, enter);
-    $exit: map.get($surface, exit);
+    @include surface-state($name, exit);
 
-    opacity: map.get($exit, opacity);
-    clip-path: map.get($exit, clip-path);
-    transition:
-      opacity $duration-slow-01 motion(exit, expressive),
-      clip-path $duration-slow-01 motion(exit, expressive),
-      visibility 0ms linear $duration-slow-01;
     visibility: hidden;
 
     &.is-visible,
     &[data-motion-state='enter'] {
-      opacity: map.get($enter, opacity);
-      clip-path: map.get($enter, clip-path);
-      transition:
-        opacity $duration-slow-01 motion(entrance, expressive),
-        clip-path $duration-slow-01 motion(entrance, expressive),
-        visibility 0ms linear;
+      @include surface-state($name, enter);
+
       visibility: inherit;
     }
 
     &[data-exiting],
     &[data-motion-state='exit'] {
-      opacity: map.get($exit, opacity);
-      clip-path: map.get($exit, clip-path);
-      transition:
-        opacity $duration-slow-01 motion(exit, expressive),
-        clip-path $duration-slow-01 motion(exit, expressive),
-        visibility 0ms linear $duration-slow-01;
+      @include surface-state($name, exit);
     }
 
     @media screen and (prefers-reduced-motion: reduce) {
-      clip-path: none;
-      transition:
-        opacity $duration-slow-01 motion(standard, expressive),
-        visibility 0ms linear $duration-slow-01;
+      @include surface-state($name, exit, $reduced-motion: true);
 
       &.is-visible,
       &[data-motion-state='enter'] {
-        clip-path: none;
-        transition:
-          opacity $duration-slow-01 motion(standard, expressive),
-          visibility 0ms linear;
+        @include surface-state($name, enter, $reduced-motion: true);
       }
 
       &[data-exiting],
       &[data-motion-state='exit'] {
-        clip-path: none;
-        transition:
-          opacity $duration-slow-01 motion(standard, expressive),
-          visibility 0ms linear $duration-slow-01;
+        @include surface-state($name, exit, $reduced-motion: true);
       }
     }
   }

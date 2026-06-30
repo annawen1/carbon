@@ -34,5 +34,9 @@ from the package by writing the following:
 | `$duration-slow-01`     | Duration |
 | `$duration-slow-02`     | Duration |
 | `$easings`              | Map      |
+| `$surfaces`             | Map      |
 | `@mixin motion`         | Mixin    |
-| `@function motion`      | Mixin    |
+| `@mixin surface`        | Mixin    |
+| `@mixin surface-state`  | Mixin    |
+| `@function motion`      | Function |
+| `@function surface`     | Function |

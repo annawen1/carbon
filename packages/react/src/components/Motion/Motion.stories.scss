@@ -11,10 +11,6 @@
 @use '@carbon/react/scss/components/modal/modal';
 @use '@carbon/react/scss/components/dialog/dialog';
 @use '@carbon/react/scss/motion' as motion;
-@use 'sass:map';
-
-$invoke-enter: motion.surface(invoke, enter);
-$invoke-exit: motion.surface(invoke, exit);
 
 .preview-modal-with-presence {
   @include modal.modal(
@@ -50,19 +46,13 @@ $invoke-exit: motion.surface(invoke, exit);
 
 .preview-modal-invoke__modal--surface[data-motion-state]
   .dialog-refactor--modal-container {
-  clip-path: map.get($invoke-exit, clip-path);
-  opacity: map.get($invoke-exit, opacity);
-  transition:
-    clip-path motion.$duration-slow-01 motion.motion(exit, expressive),
-    opacity motion.$duration-slow-01 motion.motion(exit, expressive),
-    visibility 0ms linear motion.$duration-slow-01;
+  @include motion.surface-state(invoke, exit);
   visibility: hidden;
 }
 
 .preview-modal-invoke__modal--surface[data-motion-state='enter-start']
   .dialog-refactor--modal-container {
-  clip-path: map.get($invoke-exit, clip-path);
-  opacity: map.get($invoke-exit, opacity);
+  @include motion.surface-state(invoke, exit);
   transition: none;
   visibility: inherit;
 }
@@ -71,12 +61,7 @@ $invoke-exit: motion.surface(invoke, exit);
   .dialog-refactor--modal-container,
 .preview-modal-invoke__modal--surface[data-motion-state='enter']
   .dialog-refactor--modal-container {
-  clip-path: map.get($invoke-enter, clip-path);
-  opacity: map.get($invoke-enter, opacity);
-  transition:
-    clip-path motion.$duration-slow-01 motion.motion(entrance, expressive),
-    opacity motion.$duration-slow-01 motion.motion(entrance, expressive),
-    visibility 0ms linear;
+  @include motion.surface-state(invoke, enter);
   visibility: inherit;
 }
 
@@ -84,30 +69,19 @@ $invoke-exit: motion.surface(invoke, exit);
   .dialog-refactor--modal-container,
 .preview-modal-invoke__modal--surface[data-motion-state='exit']
   .dialog-refactor--modal-container {
-  clip-path: map.get($invoke-exit, clip-path);
-  opacity: map.get($invoke-exit, opacity);
-  transition:
-    clip-path motion.$duration-slow-01 motion.motion(exit, expressive),
-    opacity motion.$duration-slow-01 motion.motion(exit, expressive),
-    visibility 0ms linear motion.$duration-slow-01;
+  @include motion.surface-state(invoke, exit);
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
   .preview-modal-invoke__modal--surface[data-motion-state]
     .dialog-refactor--modal-container {
-    clip-path: none;
-    transition:
-      opacity motion.$duration-slow-01 motion.motion(standard, expressive),
-      visibility 0ms linear motion.$duration-slow-01;
+    @include motion.surface-state(invoke, exit, $reduced-motion: true);
   }
 
   .preview-modal-invoke__modal--surface[data-motion-state].is-visible
     .dialog-refactor--modal-container,
   .preview-modal-invoke__modal--surface[data-motion-state='enter']
     .dialog-refactor--modal-container {
-    clip-path: none;
-    transition:
-      opacity motion.$duration-slow-01 motion.motion(standard, expressive),
-      visibility 0ms linear;
+    @include motion.surface-state(invoke, enter, $reduced-motion: true);
   }
 }

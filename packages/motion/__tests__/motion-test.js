@@ -56,15 +56,19 @@ describe('@carbon/motion', () => {
       .test {
         @include motion.surface(invoke);
       }
+
+      .test-state {
+        @include motion.surface-state(invoke, enter);
+      }
     `);
 
     expect(getValue(0)).toBe('slow-01');
     expect(result.css).toContain('opacity: 0');
     expect(result.css).toContain('clip-path: inset(50% 0 50% 0)');
     expect(result.css).toContain('opacity 400ms cubic-bezier(0.4, 0.14, 1, 1)');
-    expect(result.css).toContain(
-      'clip-path 400ms cubic-bezier(0, 0, 0.3, 1)'
-    );
+    expect(result.css).toContain('clip-path 400ms cubic-bezier(0, 0, 0.3, 1)');
+    expect(result.css).toContain('.test-state');
+    expect(result.css).toContain('clip-path: inset(0 0 0 0)');
     expect(result.css).toContain('prefers-reduced-motion: reduce');
   });
 
@@ -79,6 +83,20 @@ describe('@carbon/motion', () => {
       `)
     ).rejects.toThrow(
       'Unable to find a motion surface named nope in our supported surfaces.'
+    );
+  });
+
+  test('should throw for unknown motion surface state', async () => {
+    await expect(
+      render(`
+        @use '../index.scss' as motion;
+
+        .test {
+          @include motion.surface-state(invoke, nope);
+        }
+      `)
+    ).rejects.toThrow(
+      'Unable to find a state named nope for the motion surface invoke.'
     );
   });
 

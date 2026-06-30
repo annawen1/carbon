@@ -21,13 +21,19 @@ export default {
       exclude: ['launcherButtonRef'],
     },
   },
+  argTypes: {
+    adapter: {
+      options: ['motion', 'native'],
+      control: { type: 'select' },
+    },
+  },
 };
 
-export const Invoke = () => {
+export const Invoke = (args) => {
   const [open, setOpen] = useState(false);
   const launcherButtonRef = useRef(null);
   const invokeMotion = useMotionSurface('invoke', {
-    adapter: 'motion',
+    adapter: args.adapter,
     open,
     originRef: launcherButtonRef,
     setOpen,
