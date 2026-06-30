@@ -37,6 +37,26 @@ export const unstable_tokens = [
 export type EasingName = 'standard' | 'entrance' | 'exit';
 export type EasingMode = 'productive' | 'expressive';
 export type EasingMap = Record<EasingName, Record<EasingMode, string>>;
+export type SurfaceDuration = 'slow-01';
+export type SurfaceEasing = readonly [EasingName, EasingMode];
+export type SurfaceReducedMotion = 'fade';
+
+export interface InvokeSurface {
+  kind: 'invoke';
+  origin: 'trigger';
+  duration: SurfaceDuration;
+  enter: {
+    opacity: 1;
+    clipPath: 'inset(0 0 0 0)';
+  };
+  exit: {
+    opacity: 0;
+    clipPath: 'inset(50% 0 50% 0)';
+  };
+  enterEasing: SurfaceEasing;
+  exitEasing: SurfaceEasing;
+  reducedMotion: SurfaceReducedMotion;
+}
 
 export const easings: EasingMap = {
   standard: {
@@ -71,3 +91,22 @@ export const motion = (name: EasingName, mode: EasingMode) => {
 
   return easing[mode];
 };
+
+export const surfaces = {
+  invoke: {
+    kind: 'invoke',
+    origin: 'trigger',
+    duration: 'slow-01',
+    enter: {
+      opacity: 1,
+      clipPath: 'inset(0 0 0 0)',
+    },
+    exit: {
+      opacity: 0,
+      clipPath: 'inset(50% 0 50% 0)',
+    },
+    enterEasing: ['entrance', 'expressive'],
+    exitEasing: ['exit', 'expressive'],
+    reducedMotion: 'fade',
+  },
+} as const satisfies Record<string, InvokeSurface>;

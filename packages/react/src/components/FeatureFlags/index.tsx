@@ -29,6 +29,7 @@ export interface FeatureFlagsProps {
   enableFocusWrapWithoutSentinels?: boolean;
   enableDialogElement?: boolean;
   enableV12DynamicFloatingStyles?: boolean;
+  enableV12Motion?: boolean;
   enableEnhancedFileUploader?: boolean;
   enablePresence?: boolean;
 }
@@ -60,6 +61,7 @@ export const FeatureFlags = ({
   enableFocusWrapWithoutSentinels = false,
   enableDialogElement = false,
   enableV12DynamicFloatingStyles = false,
+  enableV12Motion = false,
   enableEnhancedFileUploader = false,
   enablePresence = false,
 }: FeatureFlagsProps) => {
@@ -76,6 +78,7 @@ export const FeatureFlags = ({
       'enable-focus-wrap-without-sentinels': enableFocusWrapWithoutSentinels,
       'enable-dialog-element': enableDialogElement,
       'enable-v12-dynamic-floating-styles': enableV12DynamicFloatingStyles,
+      'enable-v12-motion': enableV12Motion,
       'enable-enhanced-file-uploader': enableEnhancedFileUploader,
       'enable-presence': enablePresence,
       ...flags,
@@ -93,6 +96,7 @@ export const FeatureFlags = ({
     enableFocusWrapWithoutSentinels,
     enableDialogElement,
     enableV12DynamicFloatingStyles,
+    enableV12Motion,
     enableEnhancedFileUploader,
     enablePresence,
     flags,
@@ -125,6 +129,7 @@ FeatureFlags.propTypes = {
   enableFocusWrapWithoutSentinels: PropTypes.bool,
   enableDialogElement: PropTypes.bool,
   enableV12DynamicFloatingStyles: PropTypes.bool,
+  enableV12Motion: PropTypes.bool,
   enableEnhancedFileUploader: PropTypes.bool,
   enablePresence: PropTypes.bool,
 };

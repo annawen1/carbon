@@ -1,0 +1,113 @@
+//
+// Copyright IBM Corp. 2026
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@use '@carbon/react/scss/config' with (
+  $prefix: 'dialog-refactor'
+);
+@use '@carbon/react/scss/components/modal/modal';
+@use '@carbon/react/scss/components/dialog/dialog';
+@use '@carbon/react/scss/motion' as motion;
+@use 'sass:map';
+
+$invoke-enter: motion.surface(invoke, enter);
+$invoke-exit: motion.surface(invoke, exit);
+
+.preview-modal-with-presence {
+  @include modal.modal(
+    $enable-experimental-focus-wrap-without-sentinels: false,
+    $enable-focus-wrap-without-sentinels: false,
+    $enable-dialog-element: false,
+    $enable-presence: true
+  );
+}
+
+.preview-modal-invoke__motion-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.preview-modal-invoke__motion-layer > * {
+  pointer-events: auto;
+}
+
+.preview-modal-invoke__modal--surface[data-motion-state='exit'] {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.preview-modal-invoke__modal--surface[data-motion-state].is-visible,
+.preview-modal-invoke__modal--surface[data-motion-state='enter-start'],
+.preview-modal-invoke__modal--surface[data-motion-state='enter'],
+.preview-modal-invoke__modal--surface[data-motion-state][data-exiting] {
+  pointer-events: auto;
+  visibility: inherit;
+}
+
+.preview-modal-invoke__modal--surface[data-motion-state]
+  .dialog-refactor--modal-container {
+  clip-path: map.get($invoke-exit, clip-path);
+  opacity: map.get($invoke-exit, opacity);
+  transition:
+    clip-path motion.$duration-slow-01 motion.motion(exit, expressive),
+    opacity motion.$duration-slow-01 motion.motion(exit, expressive),
+    visibility 0ms linear motion.$duration-slow-01;
+  visibility: hidden;
+}
+
+.preview-modal-invoke__modal--surface[data-motion-state='enter-start']
+  .dialog-refactor--modal-container {
+  clip-path: map.get($invoke-exit, clip-path);
+  opacity: map.get($invoke-exit, opacity);
+  transition: none;
+  visibility: inherit;
+}
+
+.preview-modal-invoke__modal--surface[data-motion-state].is-visible
+  .dialog-refactor--modal-container,
+.preview-modal-invoke__modal--surface[data-motion-state='enter']
+  .dialog-refactor--modal-container {
+  clip-path: map.get($invoke-enter, clip-path);
+  opacity: map.get($invoke-enter, opacity);
+  transition:
+    clip-path motion.$duration-slow-01 motion.motion(entrance, expressive),
+    opacity motion.$duration-slow-01 motion.motion(entrance, expressive),
+    visibility 0ms linear;
+  visibility: inherit;
+}
+
+.preview-modal-invoke__modal--surface[data-motion-state][data-exiting]
+  .dialog-refactor--modal-container,
+.preview-modal-invoke__modal--surface[data-motion-state='exit']
+  .dialog-refactor--modal-container {
+  clip-path: map.get($invoke-exit, clip-path);
+  opacity: map.get($invoke-exit, opacity);
+  transition:
+    clip-path motion.$duration-slow-01 motion.motion(exit, expressive),
+    opacity motion.$duration-slow-01 motion.motion(exit, expressive),
+    visibility 0ms linear motion.$duration-slow-01;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .preview-modal-invoke__modal--surface[data-motion-state]
+    .dialog-refactor--modal-container {
+    clip-path: none;
+    transition:
+      opacity motion.$duration-slow-01 motion.motion(standard, expressive),
+      visibility 0ms linear motion.$duration-slow-01;
+  }
+
+  .preview-modal-invoke__modal--surface[data-motion-state].is-visible
+    .dialog-refactor--modal-container,
+  .preview-modal-invoke__modal--surface[data-motion-state='enter']
+    .dialog-refactor--modal-container {
+    clip-path: none;
+    transition:
+      opacity motion.$duration-slow-01 motion.motion(standard, expressive),
+      visibility 0ms linear;
+  }
+}

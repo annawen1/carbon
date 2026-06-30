@@ -55,6 +55,124 @@ $easings: (
   transition-timing-function: motion($name, $mode);
 }
 
+/// Named motion intent definitions
+/// @type Map
+/// @access public
+/// @group @carbon/motion
+$surfaces: (
+  invoke: (
+    kind: invoke,
+    origin: trigger,
+    duration: slow-01,
+    enter: (
+      opacity: 1,
+      clip-path: inset(0 0 0 0),
+    ),
+    exit: (
+      opacity: 0,
+      clip-path: inset(50% 0 50% 0),
+    ),
+    enter-easing: (
+      entrance,
+      expressive,
+    ),
+    exit-easing: (
+      exit,
+      expressive,
+    ),
+    reduced-motion: fade,
+  ),
+);
+
+/// Get a named motion surface or one of its properties
+/// @param {String} $name - The name of the surface to retrieve
+/// @param {String | Null} $property [null] - Optional surface property to retrieve
+/// @access public
+/// @group @carbon/motion
+/// @return {Map | *} The surface definition or requested property
+@function surface($name, $property: null) {
+  @if not(map.has-key($surfaces, $name)) {
+    @error 'Unable to find a motion surface named #{$name} in our supported surfaces.';
+  }
+
+  $surface: map.get($surfaces, $name);
+
+  @if $property == null {
+    @return $surface;
+  }
+
+  @if not(map.has-key($surface, $property)) {
+    @error 'Unable to find a property named #{$property} for the motion surface #{$name}.';
+  }
+
+  @return map.get($surface, $property);
+}
+
+/// Apply native CSS for a named motion surface
+/// @param {String} $name - The name of the surface to apply
+/// @access public
+/// @group @carbon/motion
+@mixin surface($name) {
+  $surface: surface($name);
+
+  @if map.get($surface, kind) == invoke {
+    $enter: map.get($surface, enter);
+    $exit: map.get($surface, exit);
+
+    opacity: map.get($exit, opacity);
+    clip-path: map.get($exit, clip-path);
+    transition:
+      opacity $duration-slow-01 motion(exit, expressive),
+      clip-path $duration-slow-01 motion(exit, expressive),
+      visibility 0ms linear $duration-slow-01;
+    visibility: hidden;
+
+    &.is-visible,
+    &[data-motion-state='enter'] {
+      opacity: map.get($enter, opacity);
+      clip-path: map.get($enter, clip-path);
+      transition:
+        opacity $duration-slow-01 motion(entrance, expressive),
+        clip-path $duration-slow-01 motion(entrance, expressive),
+        visibility 0ms linear;
+      visibility: inherit;
+    }
+
+    &[data-exiting],
+    &[data-motion-state='exit'] {
+      opacity: map.get($exit, opacity);
+      clip-path: map.get($exit, clip-path);
+      transition:
+        opacity $duration-slow-01 motion(exit, expressive),
+        clip-path $duration-slow-01 motion(exit, expressive),
+        visibility 0ms linear $duration-slow-01;
+    }
+
+    @media screen and (prefers-reduced-motion: reduce) {
+      clip-path: none;
+      transition:
+        opacity $duration-slow-01 motion(standard, expressive),
+        visibility 0ms linear $duration-slow-01;
+
+      &.is-visible,
+      &[data-motion-state='enter'] {
+        clip-path: none;
+        transition:
+          opacity $duration-slow-01 motion(standard, expressive),
+          visibility 0ms linear;
+      }
+
+      &[data-exiting],
+      &[data-motion-state='exit'] {
+        clip-path: none;
+        transition:
+          opacity $duration-slow-01 motion(standard, expressive),
+          visibility 0ms linear $duration-slow-01;
+      }
+    }
+  }
+}
+
 /// @access public
 /// @type Duration
 /// @group @carbon/motion

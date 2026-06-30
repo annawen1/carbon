@@ -1,8 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`@carbon/motion @carbon/motion/scss/motion.scss 1`] = `
 [
   "easings",
+  "surfaces",
   "duration-fast-01",
   "duration-fast-02",
   "duration-moderate-01",
@@ -47,6 +48,30 @@ exports[`@carbon/motion Public API 1`] = `
   "motion": [Function],
   "slow01": "400ms",
   "slow02": "700ms",
+  "surfaces": {
+    "invoke": {
+      "duration": "slow-01",
+      "enter": {
+        "clipPath": "inset(0 0 0 0)",
+        "opacity": 1,
+      },
+      "enterEasing": [
+        "entrance",
+        "expressive",
+      ],
+      "exit": {
+        "clipPath": "inset(50% 0 50% 0)",
+        "opacity": 0,
+      },
+      "exitEasing": [
+        "exit",
+        "expressive",
+      ],
+      "kind": "invoke",
+      "origin": "trigger",
+      "reducedMotion": "fade",
+    },
+  },
   "unstable_tokens": [
     "fast01",
     "fast02",
