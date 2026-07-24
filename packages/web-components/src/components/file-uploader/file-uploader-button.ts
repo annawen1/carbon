@@ -7,7 +7,7 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
@@ -15,6 +15,8 @@ import styles from './file-uploader.scss?lit';
 import { BUTTON_KIND, BUTTON_SIZE } from '../button/defs';
 
 export { FORM_ELEMENT_COLOR_SCHEME as TILE_COLOR_SCHEME } from '../../globals/shared-enums';
+
+const selectorInput = `.${prefix}--file-input`;
 
 /**
  * File uploader button .
@@ -25,24 +27,25 @@ export { FORM_ELEMENT_COLOR_SCHEME as TILE_COLOR_SCHEME } from '../../globals/sh
 class CDSFileUploaderButton extends HostListenerMixin(LitElement) {
   static is = `${prefix}-file-uploader-button`;
 
+  @query(selectorInput)
+  private _fileInput!: HTMLInputElement;
+
   /**
    * Handles `click` event on the button.
    */
   private _handleClick(event) {
     event.target.value = null;
-    const { selectorInput } = this.constructor as typeof CDSFileUploaderButton;
-    this?.shadowRoot?.querySelector(selectorInput)?.setAttribute('value', '');
-    (this?.shadowRoot?.querySelector(selectorInput) as HTMLElement).click();
+    this._fileInput.setAttribute('value', '');
+    this._fileInput.click();
   }
 
   /**
    * Handles `keydown` event on the button.
    */
   private _handleKeyDown(event) {
-    const { selectorInput } = this.constructor as typeof CDSFileUploaderButton;
     if (event.key === 'Enter' || event.key === 'Space') {
-      this?.shadowRoot?.querySelector(selectorInput)?.setAttribute('value', '');
-      (this?.shadowRoot?.querySelector(selectorInput) as HTMLElement).click();
+      this._fileInput.setAttribute('value', '');
+      this._fileInput.click();
     }
   }
 
@@ -53,8 +56,7 @@ class CDSFileUploaderButton extends HostListenerMixin(LitElement) {
    */
   private _handleChange(event: Event | DragEvent) {
     const addedFiles = this._getFiles(event);
-    const { eventChange, selectorInput } = this
-      .constructor as typeof CDSFileUploaderButton;
+    const { eventChange } = this.constructor as typeof CDSFileUploaderButton;
     this.dispatchEvent(
       new CustomEvent(eventChange, {
         bubbles: true,
@@ -65,10 +67,7 @@ class CDSFileUploaderButton extends HostListenerMixin(LitElement) {
       })
     );
 
-    const fileInput = this?.shadowRoot?.querySelector(selectorInput);
-    if (fileInput) {
-      (fileInput as HTMLInputElement).value = '';
-    }
+    this._fileInput.value = '';
   }
 
   /**
@@ -206,7 +205,7 @@ class CDSFileUploaderButton extends HostListenerMixin(LitElement) {
    * A selector that will return the file `input`.
    */
   static get selectorInput() {
-    return `.${prefix}--file-input`;
+    return selectorInput;
   }
 
   static styles = styles;

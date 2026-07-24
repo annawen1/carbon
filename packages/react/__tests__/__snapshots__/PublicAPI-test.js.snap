@@ -1517,6 +1517,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -3327,6 +3328,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -3371,6 +3373,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -3570,6 +3573,9 @@ Map {
         "type": "bool",
       },
       "enableV12Overflowmenu": {
+        "type": "bool",
+      },
+      "enableV12Release": {
         "type": "bool",
       },
       "enableV12TileDefaultIcons": {
@@ -4099,6 +4105,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -5887,6 +5894,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -7070,6 +7078,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -7796,6 +7805,17 @@ Map {
       "backwardText": {
         "type": "string",
       },
+      "backwardTextTooltipPosition": {
+        "args": [
+          [
+            "top",
+            "right",
+            "bottom",
+            "left",
+          ],
+        ],
+        "type": "oneOf",
+      },
       "className": {
         "type": "string",
       },
@@ -7804,6 +7824,17 @@ Map {
       },
       "forwardText": {
         "type": "string",
+      },
+      "forwardTextTooltipPosition": {
+        "args": [
+          [
+            "top",
+            "right",
+            "bottom",
+            "left",
+          ],
+        ],
+        "type": "oneOf",
       },
       "id": {
         "args": [
@@ -7897,6 +7928,9 @@ Map {
       },
       "pagesUnknown": {
         "type": "bool",
+      },
+      "renderPageSelect": {
+        "type": "func",
       },
       "size": {
         "args": [
@@ -9867,6 +9901,16 @@ Map {
       "scrollIntoView": {
         "type": "bool",
       },
+      "size": {
+        "args": [
+          [
+            "sm",
+            "md",
+            "lg",
+          ],
+        ],
+        "type": "oneOf",
+      },
     },
   },
   "TabListVertical" => {
@@ -9888,6 +9932,17 @@ Map {
       },
       "className": {
         "type": "string",
+      },
+      "size": {
+        "args": [
+          [
+            "sm",
+            "md",
+            "lg",
+            "xl",
+          ],
+        ],
+        "type": "oneOf",
       },
     },
   },
@@ -11794,6 +11849,9 @@ Map {
       "enableV12Overflowmenu": {
         "type": "bool",
       },
+      "enableV12Release": {
+        "type": "bool",
+      },
       "enableV12TileDefaultIcons": {
         "type": "bool",
       },
@@ -13473,7 +13531,35 @@ Map {
   "preview__IconIndicator" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
+      "align": {
+        "args": [
+          [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end",
+          ],
+        ],
+        "type": "oneOf",
+      },
+      "autoAlign": {
+        "type": "bool",
+      },
       "className": {
+        "type": "string",
+      },
+      "compact": {
+        "type": "bool",
+      },
+      "iconDescription": {
         "type": "string",
       },
       "kind": {
@@ -13721,8 +13807,33 @@ Map {
   "preview__ShapeIndicator" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
+      "align": {
+        "args": [
+          [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end",
+          ],
+        ],
+        "type": "oneOf",
+      },
+      "autoAlign": {
+        "type": "bool",
+      },
       "className": {
         "type": "string",
+      },
+      "compact": {
+        "type": "bool",
       },
       "kind": {
         "args": [
@@ -13745,6 +13856,9 @@ Map {
       },
       "label": {
         "isRequired": true,
+        "type": "string",
+      },
+      "shapeDescription": {
         "type": "string",
       },
       "textSize": {
@@ -13968,6 +14082,9 @@ Map {
         "type": "bool",
       },
       "enableV12Overflowmenu": {
+        "type": "bool",
+      },
+      "enableV12Release": {
         "type": "bool",
       },
       "enableV12TileDefaultIcons": {
@@ -15456,7 +15573,35 @@ Map {
   "unstable__IconIndicator" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
+      "align": {
+        "args": [
+          [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end",
+          ],
+        ],
+        "type": "oneOf",
+      },
+      "autoAlign": {
+        "type": "bool",
+      },
       "className": {
+        "type": "string",
+      },
+      "compact": {
+        "type": "bool",
+      },
+      "iconDescription": {
         "type": "string",
       },
       "kind": {
@@ -15704,8 +15849,33 @@ Map {
   "unstable__ShapeIndicator" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
+      "align": {
+        "args": [
+          [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end",
+          ],
+        ],
+        "type": "oneOf",
+      },
+      "autoAlign": {
+        "type": "bool",
+      },
       "className": {
         "type": "string",
+      },
+      "compact": {
+        "type": "bool",
       },
       "kind": {
         "args": [
@@ -15728,6 +15898,9 @@ Map {
       },
       "label": {
         "isRequired": true,
+        "type": "string",
+      },
+      "shapeDescription": {
         "type": "string",
       },
       "textSize": {

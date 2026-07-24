@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import styles from './menu-item.scss?lit';
 import { consume } from '@lit/context';
@@ -21,6 +21,13 @@ class CDSmenuItemSelectable extends LitElement {
 
   @consume({ context: MenuContext })
   context;
+
+  /**
+   * The menu item element in the shadow DOM.
+   */
+  @query(`${prefix}-menu-item`)
+  private _menuItem?: HTMLElement;
+
   /**
    * Label for the menu item selectable.
    */
@@ -89,11 +96,8 @@ class CDSmenuItemSelectable extends LitElement {
   }
 
   firstUpdated() {
-    const menuItemSelectable = this.shadowRoot?.querySelector(
-      `${prefix}-menu-item`
-    ) as HTMLElement | null;
-    if (menuItemSelectable) {
-      menuItemSelectable.addEventListener('keydown', this._handleKeydown);
+    if (this._menuItem) {
+      this._menuItem.addEventListener('keydown', this._handleKeydown);
     }
 
     this.context.updateFromChild({ hasSelectableItems: true });

@@ -7,7 +7,7 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import HostListener from '../../globals/decorators/host-listener';
@@ -15,6 +15,8 @@ import ifNonEmpty from '../../globals/directives/if-non-empty';
 import styles from './file-uploader.scss?lit';
 
 export { FORM_ELEMENT_COLOR_SCHEME as TILE_COLOR_SCHEME } from '../../globals/shared-enums';
+
+const selectorInput = `.${prefix}--file-input`;
 
 /**
  * The value to set to `event.dataTransfer.dropEffect`, keyed by the event nane.
@@ -33,6 +35,9 @@ const dropEffects = {
 class CDSFileUploaderDropContainer extends HostListenerMixin(LitElement) {
   static is = `${prefix}-file-uploader-drop-container`;
 
+  @query(selectorInput)
+  private _fileInput!: HTMLInputElement;
+
   /**
    * `true` to show the active state of this UI.
    */
@@ -44,7 +49,7 @@ class CDSFileUploaderDropContainer extends HostListenerMixin(LitElement) {
    * @param event The event.
    */
   private _handleChange(event: Event | DragEvent) {
-    const { eventChange, selectorInput } = this
+    const { eventChange } = this
       .constructor as typeof CDSFileUploaderDropContainer;
     const { files } =
       (event.type === 'drop'
@@ -62,10 +67,7 @@ class CDSFileUploaderDropContainer extends HostListenerMixin(LitElement) {
       })
     );
 
-    const fileInput = this?.shadowRoot?.querySelector(selectorInput);
-    if (fileInput) {
-      (fileInput as HTMLInputElement).value = ''; // carbon-web-components#904
-    }
+    this._fileInput.value = ''; // carbon-web-components#904
   }
 
   /**
@@ -206,7 +208,7 @@ class CDSFileUploaderDropContainer extends HostListenerMixin(LitElement) {
    * A selector that will return the file `input`.
    */
   static get selectorInput() {
-    return `.${prefix}--file-input`;
+    return selectorInput;
   }
 
   static styles = styles;

@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import {
   PROGRESS_BAR_SIZE,
@@ -28,6 +28,9 @@ export { PROGRESS_BAR_SIZE, PROGRESS_BAR_STATUS, PROGRESS_BAR_TYPE };
  */
 class CDSProgressBar extends LitElement {
   static is = `${prefix}-progress-bar`;
+
+  @query(`.${prefix}--progress-bar__bar`)
+  private _bar!: HTMLDivElement;
 
   /**
    * The current progress as a textual representation.
@@ -106,18 +109,13 @@ class CDSProgressBar extends LitElement {
 
       const percentage: number = cappedValue / max;
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
-      const bar = this.shadowRoot!.querySelector(
-        `.${prefix}--progress-bar__bar`
-      ) as HTMLElement;
-
       if (
         status != PROGRESS_BAR_STATUS.ERROR &&
         status != PROGRESS_BAR_STATUS.FINISHED
       ) {
-        bar.style.transform = `scaleX(${percentage})`;
+        this._bar.style.transform = `scaleX(${percentage})`;
       } else {
-        bar.style.transform = 'none';
+        this._bar.style.transform = 'none';
       }
     }
   }
