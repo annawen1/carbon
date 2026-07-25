@@ -6,6 +6,7 @@
  */
 
 import { defineCustomElement } from '../../globals/register';
+import '../tooltip/index';
 import CDSShapeIndicator from './shape-indicator';
 
 export { CDSShapeIndicator };
