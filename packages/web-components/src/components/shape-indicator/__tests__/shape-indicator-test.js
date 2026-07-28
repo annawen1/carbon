@@ -6,6 +6,7 @@
  */
 import { expect, fixture, html } from '@open-wc/testing';
 import '@carbon/web-components/es/components/shape-indicator/index.js';
+import { findUnregisteredCarbonElements } from '../../../globals/internal/test-helpers/registration';
 
 describe('cds-shape-indicator', function () {
   const shapeIndicator = html`<cds-shape-indicator
@@ -154,5 +155,19 @@ describe('cds-shape-indicator', function () {
     // When kind is invalid, render should return null
     const svgElement = el.shadowRoot.querySelector('svg');
     expect(svgElement).to.not.exist;
+  });
+
+  it('registers every Carbon element it renders', async () => {
+    // `compact` renders nested `cds-definition-tooltip`
+    const el = await fixture(
+      html`<cds-shape-indicator
+        compact
+        kind="failed"
+        label="test label></cds-shape-indicator>`
+    );
+    await el.updateComplete;
+
+    expect(el.shadowRoot.querySelector('cds-definition-tooltip')).to.exist;
+    expect(findUnregisteredCarbonElements(el)).to.eql([]);
   });
 });

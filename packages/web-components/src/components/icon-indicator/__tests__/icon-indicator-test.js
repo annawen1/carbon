@@ -4,8 +4,10 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
+
 import { expect, fixture, html } from '@open-wc/testing';
 import '@carbon/web-components/es/components/icon-indicator/index.js';
+import { findUnregisteredCarbonElements } from '../../../globals/internal/test-helpers/registration';
 
 describe('cds-icon-indicator', function () {
   const iconIndicator = html`<cds-icon-indicator
@@ -85,5 +87,19 @@ describe('cds-icon-indicator', function () {
       const svgElement = el.shadowRoot.querySelector('svg');
       expect(svgElement).to.exist;
     }
+  });
+
+  it('registers every Carbon element it renders', async () => {
+    // `compact` renders nested `<cds-definition-tooltip>`
+    const el = await fixture(
+      html`<cds-icon-indicator
+        compact
+        kind="failed"
+        label="test label"></cds-icon-indicator>`
+    );
+    await el.updateComplete;
+
+    expect(el.shadowRoot.querySelector('cds-definition-tooltip')).to.exist;
+    expect(findUnregisteredCarbonElements(el)).to.eql([]);
   });
 });
