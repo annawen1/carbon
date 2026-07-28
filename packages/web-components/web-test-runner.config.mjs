@@ -12,7 +12,7 @@ export default {
       },
     }),
   ],
-  files: 'src/components/**/__tests__/**/*.js',
+  files: 'src/{components,globals}/**/__tests__/**/*.js',
   nodeResolve: {
     extensions: ['.js', '.ts'],
   },
@@ -81,4 +81,18 @@ export default {
       timeout: 5000,
     },
   },
+
+  // Motion (and some Carbon packages) read process.env.NODE_ENV; browsers
+  // do not define `process` unless a bundler replaces it.
+  testRunnerHtml: (testFramework) => `<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <script>
+      window.process = window.process || { env: { NODE_ENV: 'test' } };
+    </script>
+    <script type="module" src="${testFramework}"></script>
+  </body>
+</html>
+`,
 };

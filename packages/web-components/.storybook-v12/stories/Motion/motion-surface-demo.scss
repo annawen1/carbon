@@ -1,0 +1,47 @@
+//
+// Copyright IBM Corp. 2026
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@use '@carbon/styles/scss/motion' as motion;
+
+:host {
+  display: contents;
+}
+
+.motion-surface-demo__modal {
+  position: fixed;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(22, 22, 22, 0.5);
+  inset: 0;
+}
+
+.motion-surface-demo__container {
+  padding: 1rem;
+  background: var(--cds-layer, #ffffff);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  color: var(--cds-text-primary, #161616);
+  inline-size: min(100% - 2rem, 28rem);
+  transform-origin: center center;
+}
+
+.motion-surface-demo__container[data-carbon-surface='stretch'] {
+  @include motion.surface(stretch);
+}
+
+.motion-surface-demo__heading {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.motion-surface-demo__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-start: 1rem;
+}
