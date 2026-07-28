@@ -163,7 +163,7 @@ describe('cds-shape-indicator', function () {
       html`<cds-shape-indicator
         compact
         kind="failed"
-        label="test label></cds-shape-indicator>`
+        label="test label"></cds-shape-indicator>`
     );
     await el.updateComplete;
 
