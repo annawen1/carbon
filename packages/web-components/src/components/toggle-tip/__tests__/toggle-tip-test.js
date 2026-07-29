@@ -5,7 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { expect, fixture, html, oneEvent } from '@open-wc/testing';
+import { sendKeys } from '@web/test-runner-commands';
 import '@carbon/web-components/es/components/toggle-tip/index.js';
+import '@carbon/web-components/es/components/button/index.js';
 
 describe('cds-toggletip', function () {
   it('should render', async () => {
@@ -74,6 +76,38 @@ describe('cds-toggletip', function () {
     await el.updateComplete;
 
     expect(el.open).to.be.false;
+  });
+
+  // Focusout containment relies on `this.contains(event.relatedTarget)`, which
+  // works across shadow boundaries because `relatedTarget` is retargeted into
+  // the host's tree scope. Guard the case that used to need a shadow-piercing
+  // walk: moving focus back to the trigger button — which lives in the
+  // toggletip's own shadow — must keep it open.
+  it('does not close when focus returns to the trigger in its own shadow', async () => {
+    const el = await fixture(html`
+      <cds-toggletip open>
+        <p slot="body-text">body</p>
+        <cds-button slot="actions">Action</cds-button>
+      </cds-toggletip>
+    `);
+    await el.updateComplete;
+    expect(el.open).to.be.true;
+
+    // Focus the shadow trigger, Tab to the slotted action, then Shift+Tab back
+    // to the trigger: relatedTarget is now an element in the toggletip's own
+    // shadow (retargeted to the host).
+    const trigger = el.shadowRoot.querySelector('.cds--toggletip-button');
+    trigger.focus();
+    await el.updateComplete;
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ down: 'Shift' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ up: 'Shift' });
+    await el.updateComplete;
+
+    // Precondition: focus actually returned to the trigger in the own shadow.
+    expect(el.shadowRoot.activeElement).to.equal(trigger);
+    expect(el.open).to.be.true;
   });
 
   it('should render body text when provided via slot', async () => {

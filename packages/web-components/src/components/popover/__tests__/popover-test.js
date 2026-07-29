@@ -312,6 +312,50 @@ describe('cds-popover-content', function () {
   });
 });
 describe('cds-popover focusout/outsideclick', () => {
+  // Focusout containment relies on `this.contains(event.relatedTarget)`, which
+  // works across shadow boundaries because `relatedTarget` is retargeted into
+  // the host's tree scope. Guard the case that used to need a shadow-piercing
+  // walk: Tabbing into a nested custom element's shadow DOM must keep the
+  // popover open.
+  it('does not close when Tab moves focus into a nested shadow root', async () => {
+    if (!customElements.get('cds-popover-nested-fixture')) {
+      customElements.define(
+        'cds-popover-nested-fixture',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' }).innerHTML =
+              '<button type="button">nested</button>';
+          }
+        }
+      );
+    }
+
+    const el = await fixture(html`
+      <cds-popover open>
+        <button id="trigger" type="button">trigger</button>
+        <cds-popover-content>
+          <cds-popover-nested-fixture></cds-popover-nested-fixture>
+        </cds-popover-content>
+      </cds-popover>
+    `);
+    await el.updateComplete;
+    expect(el.hasAttribute('open')).to.be.true;
+
+    el.querySelector('#trigger').focus();
+    await el.updateComplete;
+    // Tab from the trigger into the button inside the nested shadow root.
+    await sendKeys({ press: 'Tab' });
+    await el.updateComplete;
+
+    // Precondition: focus actually landed inside the nested shadow root.
+    const nested = el.querySelector('cds-popover-nested-fixture');
+    expect(nested.shadowRoot.activeElement).to.equal(
+      nested.shadowRoot.querySelector('button')
+    );
+    expect(el.hasAttribute('open')).to.be.true;
+  });
+
   it('does not close when clicking the trigger button', async () => {
     const el = await fixture(html`
       <cds-popover open>
