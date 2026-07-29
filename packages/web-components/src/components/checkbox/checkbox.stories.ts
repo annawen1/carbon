@@ -14,6 +14,7 @@ import '../ai-label/index';
 import './index';
 import { CHECKBOX_ORIENTATION } from './defs';
 import { iconLoader } from '../../globals/internal/icon-loader';
+import '@carbon/web-components/es/components/icon-button/index.js';
 
 const checkboxLabel = 'Checkbox label';
 

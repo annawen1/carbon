@@ -12,6 +12,7 @@ import './index';
 import '../layer/index';
 import styles from './accordion.scss?lit';
 import { withLayers } from '../../../.storybook/decorators/with-layers';
+import '@carbon/web-components/es/components/button/index.js';
 
 const sizes = {
   [`Small size (${ACCORDION_SIZE.SMALL})`]: ACCORDION_SIZE.SMALL,

@@ -10,6 +10,7 @@ import Asset16 from '@carbon/icons/es/asset/16.js';
 import User16 from '@carbon/icons/es/user/16.js';
 import Group16 from '@carbon/icons/es/group/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
+import '@carbon/web-components/es/components/menu/index.js';
 
 const args = {
   label: 'Actions',

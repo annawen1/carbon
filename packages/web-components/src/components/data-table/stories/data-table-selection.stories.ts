@@ -9,6 +9,7 @@ import { html } from 'lit';
 import { TABLE_SIZE } from '../table';
 import '../index';
 import storyDocs from './data-table.mdx';
+import '@carbon/web-components/es/components/link/index.js';
 
 const sizes = {
   [`xs (${TABLE_SIZE.XS})`]: TABLE_SIZE.XS,

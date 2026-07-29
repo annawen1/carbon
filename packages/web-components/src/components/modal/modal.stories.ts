@@ -20,6 +20,10 @@ import '../select';
 import '../textarea';
 import '../combo-box';
 import '../checkbox';
+import '@carbon/web-components/es/components/button/index.js';
+import '@carbon/web-components/es/components/dropdown/index.js';
+import '@carbon/web-components/es/components/multi-select/index.js';
+import '@carbon/web-components/es/components/text-input/index.js';
 const toggleButton = () => {
   document.querySelector('cds-modal')?.toggleAttribute('open');
 };

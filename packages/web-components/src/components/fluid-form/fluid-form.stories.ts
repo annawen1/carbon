@@ -18,6 +18,7 @@ import '../button';
 import '../modal';
 import '../fluid-search';
 import '../fluid-password-input';
+import '@carbon/web-components/es/components/select/index.js';
 
 const additionalProps = {
   class: 'some-class',

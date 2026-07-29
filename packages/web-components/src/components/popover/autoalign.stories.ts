@@ -23,6 +23,8 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 import styles from './popover-story.scss?lit';
 import aiLabelStyles from '../ai-label/ai-label-story.scss?lit';
 import tooltipStyles from '../tooltip/tooltip-story.scss?lit';
+import '@carbon/web-components/es/components/button/index.js';
+import '@carbon/web-components/es/components/link/index.js';
 
 const popoverAlignments = {
   [`top`]: POPOVER_ALIGNMENT.TOP,

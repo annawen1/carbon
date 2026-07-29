@@ -15,6 +15,10 @@ import '../index';
 import '../../pagination/index';
 import '../../select/index';
 import storyDocs from './data-table.mdx';
+import '@carbon/web-components/es/components/button/index.js';
+import '@carbon/web-components/es/components/overflow-menu/index.js';
+import '@carbon/web-components/es/components/pagination/index.js';
+import '@carbon/web-components/es/components/select/index.js';
 
 const sizes = {
   [`xs (${TABLE_SIZE.XS})`]: TABLE_SIZE.XS,

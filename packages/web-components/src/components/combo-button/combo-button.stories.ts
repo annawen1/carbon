@@ -10,6 +10,7 @@ import './index';
 import CopyFile16 from '@carbon/icons/es/copy--file/16.js';
 import Export16 from '@carbon/icons/es/export/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
+import '@carbon/web-components/es/components/menu/index.js';
 
 const args = {
   label: 'Primary action',

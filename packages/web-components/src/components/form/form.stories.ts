@@ -27,6 +27,7 @@ import '../date-picker/index';
 import '../dropdown/index';
 import '../multi-select/index';
 import '../combo-box/index';
+import '@carbon/web-components/es/components/icon-button/index.js';
 
 const content = html`
   <div slot="body-text">

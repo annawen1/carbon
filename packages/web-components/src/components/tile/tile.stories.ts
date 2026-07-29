@@ -20,6 +20,8 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 import storyDocs from './tile.mdx';
 import styles from './tile-story.scss?lit';
 import { withLayers } from '../../../.storybook/decorators/with-layers';
+import '@carbon/web-components/es/components/button/index.js';
+import '@carbon/web-components/es/components/text-input/index.js';
 
 const content = html`
   <div slot="body-text">

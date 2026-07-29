@@ -19,6 +19,8 @@ import styles from './tile-story.scss?lit';
 import { withLayers } from '../../../.storybook/decorators/with-layers';
 import '../../../.storybook/templates/with-feature-flags';
 import storyDocs from './tile.featureflag.mdx';
+import '@carbon/web-components/es/components/button/index.js';
+import '@carbon/web-components/es/components/text-input/index.js';
 
 const previewClassname = 'preview-tile';
 const content = html`

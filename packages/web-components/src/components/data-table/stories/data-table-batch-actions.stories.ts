@@ -20,6 +20,9 @@ import '../index';
 import storyDocs from './data-table.mdx';
 import '../../link/index';
 import { iconLoader } from '../../../globals/internal/icon-loader';
+import '@carbon/web-components/es/components/button/index.js';
+import '@carbon/web-components/es/components/link/index.js';
+import '@carbon/web-components/es/components/overflow-menu/index.js';
 
 const sizes = {
   [`xs (${TABLE_SIZE.XS})`]: TABLE_SIZE.XS,

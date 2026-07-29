@@ -7,6 +7,7 @@
 
 import { html } from 'lit';
 import { INLINE_LOADING_STATE } from './inline-loading';
+import '@carbon/web-components/es/components/button/index.js';
 
 const states = {
   [`${INLINE_LOADING_STATE.INACTIVE}`]: INLINE_LOADING_STATE.INACTIVE,

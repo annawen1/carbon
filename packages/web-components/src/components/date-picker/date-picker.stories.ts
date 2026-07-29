@@ -17,6 +17,7 @@ import './date-picker-input-skeleton';
 import '../layer/index';
 import '../ai-label';
 import { withLayers } from '../../../.storybook/decorators/with-layers';
+import '@carbon/web-components/es/components/icon-button/index.js';
 
 const sizes = {
   [`Small (${INPUT_SIZE.SMALL})`]: INPUT_SIZE.SMALL,

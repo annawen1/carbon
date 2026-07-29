@@ -17,6 +17,7 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 
 import { POPOVER_ALIGNMENT } from '../popover/defs';
 import { AI_LABEL_SIZE } from './defs';
+import '@carbon/web-components/es/components/link/index.js';
 
 const tooltipAlignments = {
   [`top`]: POPOVER_ALIGNMENT.TOP,

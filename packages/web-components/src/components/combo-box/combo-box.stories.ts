@@ -16,6 +16,7 @@ import '../ai-label/index';
 import '../button/index';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { withLayers } from '../../../.storybook/decorators/with-layers';
+import '@carbon/web-components/es/components/icon-button/index.js';
 
 const items = [
   {

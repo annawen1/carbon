@@ -15,6 +15,9 @@ import '../../icon-button/index';
 import '../../link/index';
 import '../../ai-label/index';
 import { iconLoader } from '../../../globals/internal/icon-loader';
+import '@carbon/web-components/es/components/ai-label/index.js';
+import '@carbon/web-components/es/components/icon-button/index.js';
+import '@carbon/web-components/es/components/link/index.js';
 
 const content = html`
   <div slot="body-text">
