@@ -9,9 +9,9 @@
  * Public registration API for `@carbon/web-components`
  *
  * Carbon's component classes are side-effect free: importing a class does not
- * register it. Registration is the consumer's choice, performed with
- * `defineCustomElement`. The auto-registering barrels
- * (`@carbon/web-components/es/components/<name>`) call this for you under the
+ * register it. Registration is opt-in by the user, performed with
+ * `defineCustomElement`. Carbon's auto-registering barrels
+ * (`@carbon/web-components/es/components/<name>`) call this automatically with the
  * default `cds-` tag names, so common use cases need nothing extra.
  *
  * To register a component under a custom tag name - i.e. to avoid a
@@ -25,7 +25,7 @@
  * defineCustomElement(CDSButton, { name: 'cwc-button' }); // <cwc-button>
  * ```
  *
- * Note: a custom element constructor may only be registered once per registry,
+ * Note: a custom element constructor can only be registered once per registry,
  * so use the custom-name path with the pure class import rather than the
  * auto-registering barrel (which already defines the default name).
  */
@@ -75,8 +75,15 @@ export interface DefineCustomElementOptions {
 /**
  * Register a custom element class, under `options.name` (or its static `is` by
  * default) in `options.registry` (or the global `customElements` by default).
- * Idempotent - defining an existing tag in the registry is a no-op. Called by
- * the registering barrels so importing a class stays pure.
+ * Called by the registering barrels so importing a class stays pure.
+ *
+ * Re-registering the same class under the same tag is an idempotent no-op (barrels
+ * rely on this). If the tag is already claimed by a different class, i.e. two
+ * copies of Carbon on the page, the first definition wins and a warning is
+ * emitted in development. If the tag is free but the class is already registered
+ * under another name (a custom-name call after the default tag was defined),
+ * this throws with an actionable message rather than an opaque platform error,
+ * since a class can only be registered once per registry.
  *
  * @param clazz The custom element class to register
  * @param options Registration options
@@ -88,9 +95,53 @@ export const defineCustomElement = <T extends CarbonCustomElementConstructor>(
 ): T => {
   const registry = options.registry ?? customElements;
   const name = options.name ?? clazz.is;
-  if (name && !registry.get(name)) {
-    registry.define(name, clazz as unknown as CustomElementConstructor);
+  if (!name) {
+    return clazz;
   }
+
+  const existing = registry.get(name);
+
+  if (existing) {
+    // The tag is already defined. Re-defining with the same class is an
+    // idempodent no-op. A different class means two copies of Carbon are fighting
+    // for the tag: the first definition wins and components can mix versions,
+    // so let users know.
+    if (existing !== clazz && process.env.NODE_ENV === 'development') {
+      globalThis.console?.warn(
+        `[@carbon/web-components] <${name}> is already defined by a different ` +
+          `class. This usually means more than one copy of ` +
+          `@carbon/web-components is on the page; the first definition wins and ` +
+          `components may mix versions. Deduplicate the dependency, or register ` +
+          `into a scoped registry.`
+      );
+    }
+    return clazz;
+  }
+
+  // The tag name is free, but a class may only be registered once per registry.
+  // If `clazz` is already registered under another name — e.g. the barrel
+  // defined its default `cds-` tag before this custom-name call — `define()`
+  // throws an opaque `NotSupportedError`. Rethrow with the cause and remedy.
+  try {
+    registry.define(name, clazz as unknown as CustomElementConstructor);
+  } catch (error) {
+    if (
+      error != null &&
+      (error as { name?: string }).name === 'NotSupportedError'
+    ) {
+      throw new Error(
+        `[@carbon/web-components] Cannot register <${name}>: ${clazz.is} is ` +
+          `already registered under another tag name, and a class may only be ` +
+          `registered once per registry. To register it under a custom name, ` +
+          `import the pure class module (not the auto-registering barrel, which ` +
+          `already defines its default tag), or register into a separate ` +
+          `scoped registry.`
+      );
+    }
+
+    throw error;
+  }
+
   return clazz;
 };
 
