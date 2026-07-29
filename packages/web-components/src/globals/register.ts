@@ -80,14 +80,19 @@ export interface DefineCustomElementOptions {
  * Re-registering the same class under the same tag is an idempotent no-op (barrels
  * rely on this). If the tag is already claimed by a different class, i.e. two
  * copies of Carbon on the page, the first definition wins and a warning is
- * emitted in development. If the tag is free but the class is already registered
- * under another name (a custom-name call after the default tag was defined),
- * this throws with an actionable message rather than an opaque platform error,
- * since a class can only be registered once per registry.
+ * emitted in development.
+ *
+ * A class may only be registered once per registry, so if the tag is free but
+ * `clazz` is already registered under another name (a custom-name call after the
+ * default tag was defined), a fresh subclass is registered under the new name
+ * instead. Elements of that tag remain `instanceof clazz` (a subclass is-a its
+ * base), and the returned class is the one that upgrades.
  *
  * @param clazz The custom element class to register
  * @param options Registration options
- * @returns The same class, for convenient re-export
+ * @returns The registered class, for convenient re-export. This is `clazz`
+ *   itself, except in the subclass case above, where it is the subclass that was
+ *   actually registered under `options.name`.
  */
 export const defineCustomElement = <T extends CarbonCustomElementConstructor>(
   clazz: T,
@@ -121,25 +126,23 @@ export const defineCustomElement = <T extends CarbonCustomElementConstructor>(
   // The tag name is free, but a class may only be registered once per registry.
   // If `clazz` is already registered under another name — e.g. the barrel
   // defined its default `cds-` tag before this custom-name call — `define()`
-  // throws an opaque `NotSupportedError`. Rethrow with the cause and remedy.
+  // throws a `NotSupportedError`. Register a fresh subclass under the new name
+  // instead, so the custom name works. Elements stay `instanceof clazz`.
   try {
     registry.define(name, clazz as unknown as CustomElementConstructor);
   } catch (error) {
     if (
-      error != null &&
-      (error as { name?: string }).name === 'NotSupportedError'
+      error == null ||
+      (error as { name?: string }).name !== 'NotSupportedError'
     ) {
-      throw new Error(
-        `[@carbon/web-components] Cannot register <${name}>: ${clazz.is} is ` +
-          `already registered under another tag name, and a class may only be ` +
-          `registered once per registry. To register it under a custom name, ` +
-          `import the pure class module (not the auto-registering barrel, which ` +
-          `already defines its default tag), or register into a separate ` +
-          `scoped registry.`
-      );
+      throw error;
     }
 
-    throw error;
+    const ScopedElement = class extends (clazz as unknown as CustomElementConstructor) {};
+    // Keep the static `is` in sync with the tag it was actually registered under.
+    Object.defineProperty(ScopedElement, 'is', { value: name });
+    registry.define(name, ScopedElement);
+    return ScopedElement as unknown as T;
   }
 
   return clazz;

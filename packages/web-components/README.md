@@ -103,6 +103,12 @@ import { defineCustomElement } from '@carbon/web-components/es/globals/register.
 defineCustomElement(CDSButton, { name: 'cwc-button' });
 ```
 
+Note: if the base class is already registered under its default tag — because
+the barrel is already imported, either explicitly or transitively,
+`defineCustomElement` will still register an identical subclass under your
+custom tag so it still works, instead of throwing. Those elements stay
+`instanceof CDSButton`.
+
 #### Run multiple versions on one page
 
 To keep the `cds-button` tag but isolate a version to part of the page, register
