@@ -6,6 +6,10 @@
  */
 
 import { defineCustomElement } from '../../globals/register';
+// v3-registration-shim: re-registers elements v11 registered transitively via class
+// imports but this component does not render. Remove in v3 (tree-shaking).
+// https://github.com/carbon-design-system/carbon/issues/22818
+import '../content-switcher/index'; // v3-registration-shim
 import '../button/index';
 import CDSTabs from './tabs';
 import CDSTab from './tab';

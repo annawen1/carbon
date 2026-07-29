@@ -6,6 +6,10 @@
  */
 
 import { defineCustomElement } from '../../globals/register';
+// v3-registration-shim: re-registers elements v11 registered transitively via class
+// imports but this component does not render. Remove in v3 (tree-shaking).
+// https://github.com/carbon-design-system/carbon/issues/22818
+import '../icon-button/index'; // v3-registration-shim
 import CDSOverflowMenu from './overflow-menu';
 import CDSOverflowMenuBody from './overflow-menu-body';
 import CDSOverflowMenuItem from './overflow-menu-item';
