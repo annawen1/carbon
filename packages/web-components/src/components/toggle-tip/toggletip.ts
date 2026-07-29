@@ -18,7 +18,6 @@ import FloatingUIController from '../../globals/controllers/floating-controller'
 import styles from './toggletip.scss?lit';
 import popoverStyles from '../popover/popover.scss?lit';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import { deepShadowContains } from '../../globals/internal/deep-shadow-contains';
 
 /**
  * Definition tooltip.
@@ -133,11 +132,11 @@ class CDSToggletip extends HostListenerMixin(FocusMixin(LitElement)) {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
   // @ts-ignore: The decorator refers to this method but TS thinks this method is not referred to
   protected _handleFocusOut(event: FocusEvent) {
+    // `focusout` retargets `relatedTarget` into this host's tree scope, so a
+    // node still inside the popover (including nested/own shadow DOM) always
+    // resolves to a descendant of (or to) this element. Plain `contains` is
+    // enough.
     if (this.contains(event.relatedTarget as Node)) {
-      return;
-    }
-
-    if (deepShadowContains(this, event.relatedTarget)) {
       return;
     }
     this.open = false;

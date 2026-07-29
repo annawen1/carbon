@@ -16,7 +16,6 @@ import HostListenerMixin from '../../globals/mixins/host-listener';
 import FloatingUIController from '../../globals/controllers/floating-controller';
 import { POPOVER_BACKGROUND_TOKEN } from './defs';
 import type { Boundary, Rect } from '@floating-ui/dom';
-import { deepShadowContains } from '../../globals/internal/deep-shadow-contains';
 
 /**
  * Popover.
@@ -217,10 +216,11 @@ class CDSPopover extends HostListenerMixin(LitElement) {
       return;
     }
 
-    if (
-      this.contains(event.relatedTarget as Node) ||
-      deepShadowContains(this, event.relatedTarget)
-    ) {
+    // `focusout` retargets `relatedTarget` into this host's tree scope, so a
+    // node still inside the popover (including nested/own shadow DOM) always
+    // resolves to a descendant of (or to) this element. Plain `contains` is
+    // enough.
+    if (this.contains(event.relatedTarget as Node)) {
       this._tabKeyPressed = false;
       return;
     }
