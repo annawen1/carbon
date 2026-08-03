@@ -74,5 +74,64 @@ describe('component registration', () => {
       }
       expect(defineCustomElement(El)).to.equal(El);
     });
+
+    it('registers a subclass under a custom name when the class is already registered', () => {
+      // classes only be registered once per registry, so a custom-name call
+      // after the default tag was defined registers an identical subclass
+      class El extends HTMLElement {
+        static is = 'reg-test-sub-default';
+      }
+      defineCustomElement(El);
+      const returned = defineCustomElement(El, { name: 'reg-test-sub-alias' });
+      const registered = customElements.get('reg-test-sub-alias');
+
+      expect(registered, 'alias registered').to.exist;
+      expect(
+        registered,
+        'registered value is a subclass, not the base'
+      ).to.not.equal(El);
+      expect(returned, 'returns the class actually registered').to.equal(
+        registered
+      );
+      expect(
+        document.createElement('reg-test-sub-alias') instanceof El,
+        'custom-tag elements stay instanceof the base'
+      ).to.be.true;
+      expect(
+        customElements.get('reg-test-sub-default'),
+        'default registration untouched'
+      ).to.equal(El);
+    });
+
+    it('keeps the first definition and warns when a different class claims a taken tag', () => {
+      class First extends HTMLElement {
+        static is = 'reg-test-dup';
+      }
+      class Second extends HTMLElement {
+        static is = 'reg-test-dup';
+      }
+      defineCustomElement(First);
+
+      const originalWarn = globalThis.console.warn;
+      let warned = '';
+      globalThis.console.warn = (message) => {
+        warned = message;
+      };
+      let returned;
+      try {
+        returned = defineCustomElement(Second);
+      } finally {
+        globalThis.console.warn = originalWarn;
+      }
+
+      expect(
+        customElements.get('reg-test-dup'),
+        'first definition wins'
+      ).to.equal(First);
+      expect(returned, 'returns the class passed in').to.equal(Second);
+      expect(warned, 'warns about the conflicting class').to.include(
+        'already defined by a different'
+      );
+    });
   });
 });
