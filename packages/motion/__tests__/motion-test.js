@@ -168,7 +168,7 @@ describe('@carbon/motion', () => {
       @use '../index.scss' as motion;
 
       .surface {
-        @include motion.surface(contextual);
+        @include motion.surface(stretch);
       }
     `);
     const css = result.css;
@@ -190,15 +190,52 @@ describe('@carbon/motion', () => {
     expect(css).toContain('transform: scale(0.96)');
   });
 
-  test('surface mixin rejects shared-element surfaces', async () => {
-    await expect(
-      render(`
-        @use '../index.scss' as motion;
+  test('surface mixin emits view-transition styles for shared-element surfaces', async () => {
+    const { result } = await render(`
+      @use '../index.scss' as motion;
 
-        .surface {
-          @include motion.surface(expand);
-        }
-      `)
-    ).rejects.toThrow(/shared-element morph with no CSS-only form/);
+      .surface {
+        @include motion.surface(expand);
+      }
+    `);
+    const css = result.css;
+
+    expect(css).toContain('view-transition-class: carbon-expand');
+    expect(css).toContain('[data-carbon-surface-id]');
+    expect(css).toContain('attr(data-carbon-surface-id type(<custom-ident>)');
+    expect(css).toContain('[data-carbon-surface-active]');
+    expect(css).toContain('visibility: hidden');
+    expect(css).toContain('view-transition-name: none');
+    expect(css).toContain('::view-transition-group(.carbon-expand)');
+    expect(css).toContain('::view-transition-old(.carbon-expand)');
+    expect(css).toContain('::view-transition-new(.carbon-expand)');
+    expect(css).toContain('@media (prefers-reduced-motion: no-preference)');
+    expect(css).toContain('@media (prefers-reduced-motion: reduce)');
+    expect(css).toContain('animation-duration: 240ms');
+    expect(css).toContain(
+      'animation-timing-function: cubic-bezier(0.2, 0, 0.38, 0.9)'
+    );
+    // Optional enter resting styles from the expand surface map
+    expect(css).toContain('opacity: 1');
+    expect(css).toContain('transform: scale(1)');
+    // Reveal attribute transitions are not used for shared-element
+    expect(css).not.toContain('[data-carbon-surface-state=enter]');
+    expect(css).not.toContain('@starting-style');
+  });
+
+  test('surface mixin emits view-transition styles for invoke without enter keyframes', async () => {
+    const { result } = await render(`
+      @use '../index.scss' as motion;
+
+      .surface {
+        @include motion.surface(invoke);
+      }
+    `);
+    const css = result.css;
+
+    expect(css).toContain('view-transition-class: carbon-invoke');
+    expect(css).toContain('::view-transition-group(.carbon-invoke)');
+    expect(css).toContain('animation-duration: 240ms');
+    expect(css).not.toContain('[data-carbon-surface-state=enter]');
   });
 });

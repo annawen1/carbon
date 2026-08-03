@@ -76,6 +76,8 @@ export { default as CDSListItem } from './components/list/list-item';
 export { default as CDSOrderedList } from './components/list/ordered-list';
 export { default as CDSUnorderedList } from './components/list/unordered-list';
 export { default as CDSLoading } from './components/loading/loading';
+export { default as CDSMotionSurface } from './components/motion-surface/motion-surface';
+export { default as CDSMotionSurfaceOrigin } from './components/motion-surface/motion-surface-origin';
 export { default as CDSModal } from './components/modal/modal';
 export { default as CDSModalBody } from './components/modal/modal-body';
 export { default as CDSModalBodyContent } from './components/modal/modal-body-content';

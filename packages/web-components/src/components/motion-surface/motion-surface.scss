@@ -1,0 +1,42 @@
+//
+// Copyright IBM Corp. 2026
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@use '@carbon/styles/scss/config' as *;
+@use '@carbon/styles/scss/motion' as motion;
+
+:host(#{$prefix}-motion-surface) {
+  display: block;
+  box-sizing: border-box;
+}
+
+:host(#{$prefix}-motion-surface[surface='expand']),
+:host(#{$prefix}-motion-surface[surface='invoke']) {
+  // Host is the View Transition element — size to slotted card content.
+  // Shared-element `surface()` styles live in motion-surface-document.scss
+  // (injected into document.head) so `::view-transition-*` can apply.
+  inline-size: fit-content;
+  max-inline-size: 100%;
+}
+
+.#{$prefix}--motion-surface__root {
+  display: block;
+  // Ensure the morphing box has a concrete size from slotted content
+  inline-size: fit-content;
+  max-inline-size: 100%;
+}
+
+.#{$prefix}--motion-surface__root[data-carbon-surface='disclosure'] {
+  @include motion.surface(disclosure);
+}
+
+.#{$prefix}--motion-surface__root[data-carbon-surface='contextual'] {
+  @include motion.surface(contextual);
+}
+
+.#{$prefix}--motion-surface__root[data-carbon-surface='stretch'] {
+  @include motion.surface(stretch);
+}

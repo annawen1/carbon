@@ -206,4 +206,95 @@ describe('MotionController', () => {
       );
     });
   });
+
+  it('throws for shared-element surfaces without surfaceId and origin', async () => {
+    const el = await openHost();
+    const target = el.renderRoot.querySelector('[data-target]');
+    let error;
+    try {
+      el.motion.setOpen({
+        surface: 'expand',
+        target,
+        open: true,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).to.exist;
+    expect(error.message).to.match(/surfaceId` and `origin/);
+  });
+
+  it('runs shared-element enter/exit without View Transitions when unsupported', async () => {
+    const originalDescriptor = Object.getOwnPropertyDescriptor(
+      Document.prototype,
+      'startViewTransition'
+    );
+    Object.defineProperty(document, 'startViewTransition', {
+      value: undefined,
+      configurable: true,
+      writable: true,
+    });
+
+    mockMatchMedia(false);
+    const el = await fixture(`<${hostTag}></${hostTag}>`);
+    await el.updateComplete;
+
+    const origin = document.createElement('div');
+    const target = document.createElement('div');
+    document.body.append(origin, target);
+
+    let exitComplete = 0;
+    el.motion.setOpen({
+      surface: 'expand',
+      surfaceId: 'expand-test',
+      origin,
+      open: true,
+      mountTarget: async () => target,
+    });
+    await waitUntil(
+      () => target.getAttribute('data-carbon-surface-id') === 'expand-test',
+      'shared-element target should receive pairing attrs',
+      { timeout: 3000 }
+    );
+    expect(target.getAttribute('data-carbon-surface')).to.equal('expand');
+    // Origin stays mounted but steps aside while the destination is shown
+    expect(origin.getAttribute('data-carbon-surface-id')).to.equal(
+      'expand-test'
+    );
+    expect(origin.hasAttribute('data-carbon-surface-active')).to.equal(true);
+
+    el.motion.setOpen({
+      surface: 'expand',
+      surfaceId: 'expand-test',
+      target,
+      origin,
+      open: false,
+      unmountTarget: async () => {
+        target.removeAttribute('data-carbon-surface');
+        target.removeAttribute('data-carbon-surface-id');
+        target.removeAttribute('data-carbon-surface-active');
+      },
+      onExitComplete: () => {
+        exitComplete += 1;
+      },
+    });
+    await waitUntil(() => exitComplete === 1, 'exit should complete', {
+      timeout: 3000,
+    });
+    expect(target.hasAttribute('data-carbon-surface-id')).to.equal(false);
+    expect(origin.hasAttribute('data-carbon-surface-id')).to.equal(false);
+    expect(origin.hasAttribute('data-carbon-surface-active')).to.equal(false);
+
+    origin.remove();
+    target.remove();
+    if (originalDescriptor) {
+      Object.defineProperty(
+        Document.prototype,
+        'startViewTransition',
+        originalDescriptor
+      );
+    } else {
+      delete document.startViewTransition;
+    }
+  });
 });

@@ -86,8 +86,8 @@ a plain `<div>` with immediate mount/unmount — no Motion runs at all.
 
 ### Native CSS
 
-`reveal` surfaces (`disclosure`, `contextual`, `stretch`) can be driven entirely
-with CSS — no JavaScript animation library required. The `@carbon/motion`
+`reveal` surfaces (`disclosure`, `contextual`, `stretch`) can be driven with CSS
+transitions — no JavaScript animation library required. The `@carbon/motion`
 package exposes a `surface()` Sass mixin that writes all enter/exit styles,
 transitions, and `@starting-style` rules from the shared surface map.
 
@@ -108,7 +108,7 @@ Apply the mixin to the element you want to animate, scoped to a
 }
 ```
 
-The mixin outputs:
+For **reveal** surfaces the mixin outputs:
 
 - **Enter styles** (resting state and `[data-carbon-surface-state='enter']`) —
   applied unconditionally so the element is always in its visible state by
@@ -133,7 +133,7 @@ transition:
 </div>
 ```
 
-#### Mounting and unmounting
+#### Mounting and unmounting (reveal)
 
 Because CSS transitions require the element to be in the DOM on both ends of the
 transition, you must keep the element **mounted while the exit transition runs**

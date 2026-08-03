@@ -301,13 +301,16 @@ What changed:
 - added `surface()` Sass function
 - added `surface()` Sass mixin for reveal surfaces (`@starting-style` entrance,
   guarded by `prefers-reduced-motion: no-preference`)
-- shared-element surfaces are rejected by the mixin (no CSS-only form)
+- shared-element surfaces use the same mixin with View Transition styles
+  (`view-transition-class` + `data-carbon-surface-id` → `view-transition-name`
+  via `attr()` + `::view-transition-*` duration/easing); consumers still call
+  `document.startViewTransition`
 
 Why:
 
 - Sass needs access to the same surface data
-- reveal surfaces can run in plain CSS; shared-element morphs need a JavaScript
-  engine
+- reveal surfaces can run in plain CSS transitions; shared-element morphs use
+  View Transitions (CSS timing + a thin JS orchestrator) or Motion `layoutId`
 
 ### `packages/motion/__tests__/motion-test.js`
 
@@ -315,8 +318,9 @@ What changed:
 
 - added tests for expand, invoke, disclosure, and contextual surfaces
 - added Sass parity tests for expand and disclosure
-- added error handling for unknown surfaces and for applying the shared-element
-  mixin in CSS
+- added error handling for unknown surfaces
+- added View Transition output tests for shared-element `surface()` includes
+  (`expand`, `invoke`)
 
 ### `packages/motion/__tests__/__snapshots__/motion-test.js.snap`
 
@@ -363,9 +367,11 @@ Surfaces are either:
 
 - `reveal`: one element animates between enter / exit styles. Works in CSS (Sass
   mixin) and in Motion React.
-- `shared-element`: one element morphs into another. Needs a JavaScript engine.
-  In React this is Motion `layoutId` pairing between `MotionSurfaceOrigin` and
-  `MotionSurface`.
+- `shared-element`: one element morphs into another. In React this can use
+  Motion `layoutId` pairing between `MotionSurfaceOrigin` and `MotionSurface`,
+  or the View Transition API with the Sass `surface()` mixin
+  (`data-carbon-surface-id` → `view-transition-name`, `view-transition-class`,
+  and `::view-transition-*` timing) and `document.startViewTransition`.
 
 `expand` and `invoke` are both shared-element. They share the same React morph
 path today. They differ in tokens:

@@ -33,7 +33,7 @@ interface RevealSurface extends MotionSurfaceBase {
 // shared-element surfaces morph one element into another
 // the adapter picks mechanism (Motion layout projection, View Transitions, FLIP)
 // optional enter/exit keyframes document the CSS-replicable layer (opacity /
-// scale) for Sass consumers and future View Transitions fallbacks
+// scale) for Sass resting styles and View Transitions consumers
 interface SharedElementSurface extends MotionSurfaceBase {
   kind: 'shared-element';
   enter?: RevealKeyframe;

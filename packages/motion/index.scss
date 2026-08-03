@@ -166,91 +166,182 @@ $-durations: (
   'slow-02': $duration-slow-02,
 );
 
-/// Apply a named reveal surface in CSS from the shared surface map.
+/// View-transition-class prefix for shared-element surfaces. Consumers set a
+/// unique pairing id via `data-carbon-surface-id`; this class lets the mixin
+/// style `::view-transition-*` without knowing that name.
+/// @access private
+/// @group @carbon/motion
+$-view-transition-class-prefix: 'carbon-';
+
+/// Apply a named surface in CSS from the shared surface map.
 ///
+/// Reveal surfaces (`disclosure`, `contextual`, `stretch`):
 /// Resting / `[data-carbon-surface-state='enter']` use the surface enter
 /// keyframes. `[data-carbon-surface-state='exit']` uses the exit keyframes.
 /// Transitions (and `@starting-style` for first-mount enter) are guarded
 /// behind `prefers-reduced-motion: no-preference` - users who prefer reduced
 /// motion get the resting styles with no animation at all.
 ///
-/// Typical usage with controlled open/close:
-///
 /// ```scss
-/// [data-carbon-surface='contextual'] {
-///   @include motion.surface(contextual);
+/// [data-carbon-surface='stretch'] {
+///   @include motion.surface(stretch);
 /// }
 /// ```
 ///
-/// Shared-element surfaces morph one element into another and have no
-/// CSS-only form; they need a JavaScript engine (Motion in React, View
-/// Transitions for web components), so this mixin rejects them
+/// Shared-element surfaces (`expand`, `invoke`):
+/// Sets `view-transition-class` on the element, maps
+/// `data-carbon-surface-id` to `view-transition-name` (CSP-safe, no inline
+/// styles), and styles the matching `::view-transition-group` / `old` / `new`
+/// pseudos with the surface duration and easing. Pair origin and destination
+/// with the same `data-carbon-surface-id`, set `data-carbon-surface-active` on
+/// the origin while the destination owns the name (releases the name and hides
+/// the origin so it does not sit under the destination), and wrap the DOM
+/// update in `document.startViewTransition(...)`.
+///
+/// ```scss
+/// [data-carbon-surface='expand'] {
+///   @include motion.surface(expand);
+/// }
+/// ```
+///
 /// @param {String} $name - The motion surface name
 /// @access public
 /// @group @carbon/motion
 @mixin surface($name) {
   $definition: surface($name);
   $kind: map.get($definition, kind);
-
-  @if $kind != 'reveal' {
-    @error 'The #{$name} surface is a shared-element morph with no CSS-only form. Pair it with a JavaScript engine instead.';
-  }
-
-  $enter: map.get($definition, enter);
-  $exit: map.get($definition, exit);
   $duration: map.get($-durations, map.get($definition, duration));
   $enter-easing: map.get($definition, enter-easing);
   $exit-easing: map.get($definition, exit-easing);
-  $properties: ();
 
-  @each $property, $value in $enter {
-    $properties: list.append($properties, $property, $separator: comma);
-  }
+  @if $kind == 'shared-element' {
+    $vt-class: #{$-view-transition-class-prefix}#{$name};
+    $enter: map.get($definition, enter);
 
-  // resting / enter styles apply regardless of motion preference
-  &,
-  &[data-carbon-surface-state='enter'] {
-    @each $property, $value in $enter {
-      #{$property}: #{$value};
-    }
-  }
+    // Pairing id is instance-specific (`data-carbon-surface-id`). This class
+    // is the stable hook for duration / easing on VT pseudos.
+    view-transition-class: $vt-class;
 
-  &[data-carbon-surface-state='exit'] {
-    @each $property, $value in $exit {
-      #{$property}: #{$value};
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    // `auto` sizes, e.g. disclosure block-size, interpolate where
-    // supported
-    interpolate-size: allow-keywords;
-    transition-duration: $duration;
-    transition-property: $properties;
-
-    &,
-    &[data-carbon-surface-state='enter'] {
-      transition-timing-function: motion(
-        list.nth($enter-easing, 1),
-        list.nth($enter-easing, 2)
+    // Map the data attribute to `view-transition-name` from the stylesheet so
+    // consumers avoid inline `style` (CSP-friendly).
+    &[data-carbon-surface-id] {
+      // Sass would parse bare `<custom-ident>` as comparison operators
+      view-transition-name: attr(
+        data-carbon-surface-id type(#{'<custom-ident>'}),
+        none
       );
     }
 
-    &[data-carbon-surface-state='exit'] {
-      transition-timing-function: motion(
-        list.nth($exit-easing, 1),
-        list.nth($exit-easing, 2)
-      );
+    // Origin steps aside while the destination owns the name: release the
+    // view-transition-name and hide the live element so it does not remain
+    // visible under the morph destination (layout space is preserved).
+    &[data-carbon-surface-active] {
+      view-transition-name: none;
+      visibility: hidden;
     }
 
-    // the styles the element enters from when it is first rendered
-    @starting-style {
-      &,
-      &[data-carbon-surface-state='enter'] {
-        @each $property, $value in $exit {
-          #{$property}: #{$value};
+    @at-root {
+      @media (prefers-reduced-motion: no-preference) {
+        ::view-transition-group(.#{$vt-class}) {
+          animation-duration: $duration;
+          animation-timing-function: motion(
+            list.nth($enter-easing, 1),
+            list.nth($enter-easing, 2)
+          );
+        }
+
+        ::view-transition-old(.#{$vt-class}) {
+          animation-duration: $duration;
+          animation-timing-function: motion(
+            list.nth($exit-easing, 1),
+            list.nth($exit-easing, 2)
+          );
+        }
+
+        ::view-transition-new(.#{$vt-class}) {
+          animation-duration: $duration;
+          animation-timing-function: motion(
+            list.nth($enter-easing, 1),
+            list.nth($enter-easing, 2)
+          );
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        ::view-transition-group(.#{$vt-class}),
+        ::view-transition-old(.#{$vt-class}),
+        ::view-transition-new(.#{$vt-class}) {
+          // stylelint-disable-next-line declaration-no-important
+          animation: none !important;
         }
       }
     }
+
+    // Optional enter/exit keyframes document the CSS-replicable opacity /
+    // scale layer (e.g. expand). They are not applied as attribute transitions
+    // here — the View Transition morph owns the animation. Resting enter
+    // styles keep the destination visible after the morph settles.
+    @if $enter {
+      @each $property, $value in $enter {
+        #{$property}: #{$value};
+      }
+    }
+  } @else if $kind == 'reveal' {
+    $enter: map.get($definition, enter);
+    $exit: map.get($definition, exit);
+    $properties: ();
+
+    @each $property, $value in $enter {
+      $properties: list.append($properties, $property, $separator: comma);
+    }
+
+    // resting / enter styles apply regardless of motion preference
+    &,
+    &[data-carbon-surface-state='enter'] {
+      @each $property, $value in $enter {
+        #{$property}: #{$value};
+      }
+    }
+
+    &[data-carbon-surface-state='exit'] {
+      @each $property, $value in $exit {
+        #{$property}: #{$value};
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      // `auto` sizes, e.g. disclosure block-size, interpolate where
+      // supported
+      interpolate-size: allow-keywords;
+      transition-duration: $duration;
+      transition-property: $properties;
+
+      &,
+      &[data-carbon-surface-state='enter'] {
+        transition-timing-function: motion(
+          list.nth($enter-easing, 1),
+          list.nth($enter-easing, 2)
+        );
+      }
+
+      &[data-carbon-surface-state='exit'] {
+        transition-timing-function: motion(
+          list.nth($exit-easing, 1),
+          list.nth($exit-easing, 2)
+        );
+      }
+
+      // the styles the element enters from when it is first rendered
+      @starting-style {
+        &,
+        &[data-carbon-surface-state='enter'] {
+          @each $property, $value in $exit {
+            #{$property}: #{$value};
+          }
+        }
+      }
+    }
+  } @else {
+    @error 'Unable to apply the #{$name} surface: unknown kind #{$kind}.';
   }
 }

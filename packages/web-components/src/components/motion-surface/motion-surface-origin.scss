@@ -1,0 +1,21 @@
+//
+// Copyright IBM Corp. 2026
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@use '@carbon/styles/scss/config' as *;
+
+// Shared-element `surface()` styles are injected into document.head via
+// ensure-document-styles.ts so `::view-transition-*` can apply.
+
+:host(#{$prefix}-motion-surface-origin) {
+  display: inline-flex;
+}
+
+.#{$prefix}--motion-surface-origin__root {
+  display: inline-flex;
+  // Shrink-wrap slotted trigger/tile for a meaningful morph box
+  max-inline-size: 100%;
+}

@@ -4,21 +4,45 @@
 // This source code is licensed under the Apache-2.0 license found in the
 // LICENSE file in the root directory of this source tree.
 //
-
-@use '@carbon/styles/scss/motion' as motion;
-
 :host {
   display: contents;
 }
 
-.motion-surface-demo__modal {
+.motion-surface-demo__backdrop {
   position: fixed;
   z-index: 9000;
+  background: rgba(22, 22, 22, 0.5);
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-surface-demo__backdrop {
+    transition: opacity 200ms ease;
+  }
+}
+
+.motion-surface-demo__backdrop[data-open] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Fullscreen centering shell — not the View Transition element */
+.motion-surface-demo__surface-stage {
+  position: fixed;
+  z-index: 9001;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(22, 22, 22, 0.5);
   inset: 0;
+  pointer-events: none;
+}
+
+.motion-surface-demo__surface {
+  display: block;
+  max-inline-size: min(100% - 2rem, 28rem);
+  pointer-events: auto;
 }
 
 .motion-surface-demo__container {
@@ -26,12 +50,8 @@
   background: var(--cds-layer, #ffffff);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   color: var(--cds-text-primary, #161616);
-  inline-size: min(100% - 2rem, 28rem);
+  inline-size: min(100vw - 2rem, 28rem);
   transform-origin: center center;
-}
-
-.motion-surface-demo__container[data-carbon-surface='stretch'] {
-  @include motion.surface(stretch);
 }
 
 .motion-surface-demo__heading {
@@ -44,4 +64,35 @@
   display: flex;
   justify-content: flex-end;
   margin-block-start: 1rem;
+}
+
+.motion-surface-demo__tiles {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+}
+
+.motion-surface-demo__tile {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border: 1px solid var(--cds-border-subtle, #e0e0e0);
+  background: var(--cds-layer, #ffffff);
+  color: var(--cds-text-primary, #161616);
+  cursor: pointer;
+  gap: 0.5rem;
+  inline-size: 100%;
+  min-block-size: 8rem;
+  text-align: start;
+}
+
+.motion-surface-demo__tile-heading {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.motion-surface-demo__tile-description {
+  margin: 0;
+  font-size: 0.875rem;
 }

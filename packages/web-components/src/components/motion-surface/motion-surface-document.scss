@@ -1,0 +1,27 @@
+//
+// Copyright IBM Corp. 2026
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@use '@carbon/styles/scss/motion' as motion;
+
+// Document-level shared-element surface styles.
+// `::view-transition-*` pseudos live on the document root, so these rules
+// cannot live only in a shadow stylesheet. The motion-surface components
+// inject this sheet once into `document.head`.
+[data-carbon-surface='expand'] {
+  @include motion.surface(expand);
+}
+
+[data-carbon-surface='invoke'] {
+  @include motion.surface(invoke);
+}
+
+// Avoid the default document cross-fade so only the named morph is visible
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
