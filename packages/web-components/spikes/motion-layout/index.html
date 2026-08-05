@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spike — layout animations in web components</title>
+    <link rel="stylesheet" href="./spike.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>Phase 0 — shared-element layout animations for web components</h1>
+      <!-- Case geometry is baked into baseline.motion-dom.json, so keep this
+           header the same height: changing it moves every case vertically. -->
+      <p>
+        Runs the hand-written FLIP engine (<code>?engine=carbon</code>, the
+        default) or Motion's MIT projection engine
+        (<code>?engine=motion-dom</code>) over the same cases.
+        <code>?mode=conformance</code> diffs against the baseline.
+      </p>
+      <div class="toolbar">
+        <button id="run-all" class="run-all">Run all cases</button>
+        <button id="run-conformance" class="run-all">Run conformance</button>
+        <span id="env" class="env"></span>
+      </div>
+    </header>
+
+    <section class="report" id="conformance" hidden>
+      <h2>Conformance vs. baseline.motion-dom.json</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Case</th>
+            <th>Phase</th>
+            <th>Worst delta</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody id="conformance-body"></tbody>
+      </table>
+    </section>
+
+    <section class="report" id="report" hidden>
+      <h2>Results</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Case</th>
+            <th>What it isolates</th>
+            <th>Open</th>
+            <th>Close</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody id="report-body"></tbody>
+      </table>
+    </section>
+
+    <!-- Case 1 ------------------------------------------------------------ -->
+    <section class="case" id="case-1">
+      <h2>1. Baseline — plain light-DOM elements</h2>
+      <p class="case-note">
+        Control case. Origin and target are separate <code>div</code>s sharing a
+        <code>data-layout-id</code>, exactly how React pairs
+        <code>MotionSurfaceOrigin</code> and <code>MotionSurface</code> with a
+        <code>layoutId</code>.
+      </p>
+      <div class="grid">
+        <div class="card" data-case="1" data-layout-id="c1-card">
+          <div class="card-media"></div>
+          <div class="card-text">
+            <p class="eyebrow">Baseline</p>
+            <h3>Plain elements</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case 2 ------------------------------------------------------------ -->
+    <section class="case" id="case-2">
+      <h2>2. Custom element hosts, light-DOM content</h2>
+      <p class="case-note">
+        The morphing element is a custom element host that reflects
+        <code>surface-id</code> to <code>data-layout-id</code>. Content stays in
+        light DOM. This is the shape <code>&lt;cds-motion-surface&gt;</code>
+        would ship as.
+      </p>
+      <div class="grid">
+        <spike-origin surface-id="c2-card" data-case="2">
+          <div class="card-media alt"></div>
+          <div class="card-text">
+            <p class="eyebrow">Host element</p>
+            <h3>Light DOM content</h3>
+          </div>
+        </spike-origin>
+      </div>
+    </section>
+
+    <!-- Case 3a ----------------------------------------------------------- -->
+    <section class="case" id="case-3a">
+      <h2>3a. Slotted content — shadow-root ancestor</h2>
+      <p class="case-note">
+        The origin sits in light DOM but is slotted into a shadow-root wrapper,
+        so its projection parent (light tree) differs from its rendered
+        ancestor (slot). Tests whether the parent mismatch breaks deltas.
+      </p>
+      <spike-slot-wrapper>
+        <div class="grid">
+          <div class="card" data-case="3a" data-layout-id="c3a-card">
+            <div class="card-media warm"></div>
+            <div class="card-text">
+              <p class="eyebrow">Slotted</p>
+              <h3>Shadow ancestor</h3>
+            </div>
+          </div>
+        </div>
+      </spike-slot-wrapper>
+    </section>
+
+    <!-- Case 3b ----------------------------------------------------------- -->
+    <section class="case" id="case-3b">
+      <h2>3b. Cross-shadow-root morph</h2>
+      <p class="case-note">
+        Origin content lives inside one shadow root, target content inside
+        another. Both shadow roots are registered as scopes on separate
+        builders constructed in the same tick, which should flush as a single
+        commit.
+      </p>
+      <div class="grid">
+        <spike-shadow-card data-case="3b"></spike-shadow-card>
+      </div>
+      <spike-shadow-dialog></spike-shadow-dialog>
+    </section>
+
+    <!-- Case 4 ------------------------------------------------------------ -->
+    <section class="case" id="case-4">
+      <h2>4. Per-element <code>data-layout</code> animation types</h2>
+      <p class="case-note">
+        The shell morphs with <code>both</code>, the image with
+        <code>preserve-aspect</code>, the text block with
+        <code>position</code>. This is the knob React's wrapper doesn't
+        currently surface, and the candidate fix for content stretch.
+      </p>
+      <div class="grid">
+        <div class="card" data-case="4" data-layout-id="c4-card">
+          <div
+            class="card-media figure"
+            data-layout-id="c4-media"
+            data-layout="preserve-aspect"></div>
+          <div
+            class="card-text"
+            data-layout-id="c4-text"
+            data-layout="position">
+            <p class="eyebrow">Scale correction</p>
+            <h3>Per-element types</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="scrim" id="scrim" hidden></div>
+    <script type="module" src="./spike.js"></script>
+  </body>
+</html>

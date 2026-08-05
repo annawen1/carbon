@@ -1,0 +1,268 @@
+:root {
+  --ink: #161616;
+  --muted: #525252;
+  --line: #e0e0e0;
+  --surface: #ffffff;
+  --field: #f4f4f4;
+  --accent: #0f62fe;
+  --pass: #0e6027;
+  --fail: #da1e28;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0 0 6rem;
+  font-family:
+    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--field);
+}
+
+.page-header {
+  padding: 2rem 2rem 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.page-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.page-header p {
+  margin: 0 0 1rem;
+  max-width: 60ch;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+code {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.9em;
+  background: var(--field);
+  padding: 0.1em 0.3em;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.run-all {
+  appearance: none;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+}
+
+.run-all:disabled {
+  background: #8d8d8d;
+  cursor: progress;
+}
+
+.env {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* Report ------------------------------------------------------------------ */
+
+.report {
+  margin: 1.5rem 2rem 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.report h2 {
+  margin: 0;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+}
+
+.report table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.report th,
+.report td {
+  text-align: left;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.report th {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.report td.detail {
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.verdict {
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+.verdict.pass {
+  color: var(--pass);
+}
+
+.verdict.fail {
+  color: var(--fail);
+}
+
+/* Cases ------------------------------------------------------------------- */
+
+.case {
+  margin: 1.5rem 2rem 0;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.case h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.case-note {
+  margin: 0 0 1.25rem;
+  max-width: 68ch;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Cards ------------------------------------------------------------------- */
+
+.card,
+spike-origin {
+  display: block;
+  inline-size: 15rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 4px;
+  text-align: start;
+}
+
+.card-media {
+  block-size: 7rem;
+  background: linear-gradient(135deg, #0f62fe, #8a3ffc);
+}
+
+.card-media.alt {
+  background: linear-gradient(135deg, #007d79, #005d5d);
+}
+
+.card-media.warm {
+  background: linear-gradient(135deg, #d02670, #a2191f);
+}
+
+.card-media.cool {
+  background: linear-gradient(135deg, #1192e8, #0072c3);
+}
+
+.card-media.figure {
+  background: linear-gradient(135deg, #ee538b, #ff832b);
+}
+
+.card-text {
+  padding: 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.card-text h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 400;
+}
+
+/* Expanded targets -------------------------------------------------------- */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgb(22 22 22 / 70%);
+  z-index: 10;
+  opacity: 0;
+}
+
+/* The morph target is a static child of a fixed layer rather than being fixed
+   itself, so the projection engine never treats it as a scroll root. */
+.dialog-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.dialog-layer > * {
+  pointer-events: auto;
+}
+
+.dialog,
+spike-target {
+  inline-size: min(38rem, 90vw);
+  display: block;
+  background: var(--surface);
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dialog .card-media,
+spike-target .card-media {
+  block-size: 16rem;
+}
+
+.dialog .card-text h3,
+spike-target .card-text h3 {
+  font-size: 1.75rem;
+}
+
+.dialog-body {
+  padding: 0 1rem 1.5rem;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 56ch;
+}

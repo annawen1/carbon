@@ -12,7 +12,7 @@ export default {
       },
     }),
   ],
-  files: 'src/components/**/__tests__/**/*.js',
+  files: 'src/**/__tests__/**/*.js',
   nodeResolve: {
     extensions: ['.js', '.ts'],
   },

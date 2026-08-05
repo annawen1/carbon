@@ -1,0 +1,159 @@
+{
+  "_meta": {
+    "purpose": "Conformance reference for the hand-written FLIP engine that replaces motion-dom. Captured from the Phase 0 spike while it was still driving Motion's projection engine via LayoutAnimationBuilder. A replacement engine should reproduce these trajectories within tolerance.",
+    "capturedFrom": "packages/web-components/spikes/motion-layout/spike.js",
+    "engine": "motion-dom@12.42.0 LayoutAnimationBuilder",
+    "surface": "expand (@carbon/motion)",
+    "transition": { "durationMs": 240, "ease": [0.2, 0, 0.38, 0.9] },
+    "method": "5 repetitions per case per phase; per-frame computed transform of the tracked element that moved most, resampled at normalised progress and reduced with a median across repetitions.",
+    "fields": {
+      "at": "normalised progress through the animation, 0 to 1",
+      "sx": "matrix scaleX",
+      "sy": "matrix scaleY",
+      "tx": "matrix translateX in px",
+      "ty": "matrix translateY in px",
+      "animations": "number of animations the update produced"
+    },
+    "tolerance": {
+      "durationMs": 25,
+      "scale": 0.05,
+      "translatePx": 12,
+      "note": "Translate values are viewport-relative and depend on window size, so re-capture the baseline if the harness viewport changes. Scale values and the shape of the easing curve are the meaningful invariants."
+    }
+  },
+
+  "1": {
+    "name": "Baseline light DOM",
+    "isolates": "Control: does the engine morph at all?",
+    "open": {
+      "durationMs": 245,
+      "animations": 1,
+      "trajectory": [
+        { "at": 0, "sx": 0.395, "sy": 0.456, "tx": -775, "ty": -79 },
+        { "at": 0.25, "sx": 0.545, "sy": 0.591, "tx": -583, "ty": -59 },
+        { "at": 0.5, "sx": 0.781, "sy": 0.803, "tx": -281, "ty": -29 },
+        { "at": 0.75, "sx": 0.939, "sy": 0.945, "tx": -78, "ty": -8 },
+        { "at": 1, "sx": 0.998, "sy": 0.998, "tx": -3, "ty": 0 }
+      ]
+    },
+    "close": {
+      "durationMs": 244,
+      "animations": 1,
+      "trajectory": [
+        { "at": 0, "sx": 2.533, "sy": 2.195, "tx": 776, "ty": 79 },
+        { "at": 0.25, "sx": 2.153, "sy": 1.899, "tx": 583, "ty": 59 },
+        { "at": 0.5, "sx": 1.555, "sy": 1.433, "tx": 281, "ty": 29 },
+        { "at": 0.75, "sx": 1.154, "sy": 1.12, "tx": 78, "ty": 8 },
+        { "at": 1, "sx": 1.006, "sy": 1.004, "tx": 3, "ty": 0 }
+      ]
+    }
+  },
+
+  "2": {
+    "name": "Custom element hosts",
+    "isolates": "Host elements standing in for <cds-motion-surface>",
+    "open": {
+      "durationMs": 245,
+      "animations": 1,
+      "trajectory": [
+        { "at": 0, "sx": 0.395, "sy": 0.456, "tx": -775, "ty": 297 },
+        { "at": 0.25, "sx": 0.54, "sy": 0.587, "tx": -589, "ty": 225 },
+        { "at": 0.5, "sx": 0.774, "sy": 0.797, "tx": -289, "ty": 111 },
+        { "at": 0.75, "sx": 0.938, "sy": 0.944, "tx": -80, "ty": 31 },
+        { "at": 1, "sx": 0.997, "sy": 0.998, "tx": -3, "ty": 1 }
+      ]
+    },
+    "close": {
+      "durationMs": 246,
+      "animations": 1,
+      "trajectory": [
+        { "at": 0, "sx": 2.533, "sy": 2.195, "tx": 776, "ty": -297 },
+        { "at": 0.25, "sx": 2.164, "sy": 1.908, "tx": 589, "ty": -225 },
+        { "at": 0.5, "sx": 1.555, "sy": 1.433, "tx": 281, "ty": -107 },
+        { "at": 0.75, "sx": 1.154, "sy": 1.12, "tx": 78, "ty": -30 },
+        { "at": 1, "sx": 1.006, "sy": 1.004, "tx": 3, "ty": -1 }
+      ]
+    }
+  },
+
+  "3a": {
+    "name": "Slotted origin",
+    "isolates": "Projection parent (light tree) vs rendered ancestor (slot)",
+    "open": {
+      "durationMs": 244,
+      "animations": 1,
+      "trajectory": [
+        { "at": 0, "sx": 0.395, "sy": 0.456, "tx": -758, "ty": 716 },
+        { "at": 0.25, "sx": 0.536, "sy": 0.583, "tx": -582, "ty": 549 },
+        { "at": 0.5, "sx": 0.781, "sy": 0.803, "tx": -275, "ty": 259 },
+        { "at": 0.75, "sx": 0.938, "sy": 0.944, "tx": -78, "ty": 74 },
+        { "at": 1, "sx": 0.997, "sy": 0.998, "tx": -3, "ty": 3 }
+      ]
+    },
+    "close": {
+      "durationMs": 245,
+      "animations": 1,
+      "trajectory": [
+        { "at": 0, "sx": 2.533, "sy": 2.195, "tx": 759, "ty": -716 },
+        { "at": 0.25, "sx": 2.153, "sy": 1.899, "tx": 571, "ty": -538 },
+        { "at": 0.5, "sx": 1.539, "sy": 1.42, "tx": 266, "ty": -251 },
+        { "at": 0.75, "sx": 1.158, "sy": 1.123, "tx": 78, "ty": -74 },
+        { "at": 1, "sx": 1.007, "sy": 1.005, "tx": 3, "ty": -3 }
+      ]
+    }
+  },
+
+  "3b": {
+    "name": "Cross shadow root",
+    "isolates": "Two shadow roots joined in a single commit",
+    "open": {
+      "durationMs": 245,
+      "animations": 1,
+      "trajectory": [
+        { "at": 0, "sx": 0.319, "sy": 1.587, "tx": -774, "ty": 1108 },
+        { "at": 0.25, "sx": 0.483, "sy": 1.446, "tx": -588, "ty": 842 },
+        { "at": 0.5, "sx": 0.753, "sy": 1.212, "tx": -280, "ty": 401 },
+        { "at": 0.75, "sx": 0.93, "sy": 1.061, "tx": -80, "ty": 115 },
+        { "at": 1, "sx": 0.996, "sy": 1.003, "tx": -4, "ty": 6 }
+      ]
+    },
+    "close": {
+      "durationMs": 245,
+      "animations": 1,
+      "trajectory": [
+        { "at": 0, "sx": 3.137, "sy": 0.63, "tx": 775, "ty": -1108 },
+        { "at": 0.25, "sx": 2.592, "sy": 0.725, "tx": 577, "ty": -825 },
+        { "at": 0.5, "sx": 1.785, "sy": 0.864, "tx": 285, "ty": -407 },
+        { "at": 0.75, "sx": 1.215, "sy": 0.963, "tx": 78, "ty": -111 },
+        { "at": 1, "sx": 1.006, "sy": 0.999, "tx": 2, "ty": -3 }
+      ]
+    }
+  },
+
+  "4": {
+    "name": "data-layout types",
+    "isolates": "preserve-aspect / position scale correction",
+    "open": {
+      "durationMs": 245,
+      "animations": 3,
+      "trajectory": [
+        { "at": 0, "sx": 0.395, "sy": 0.456, "tx": -775, "ty": 1484 },
+        { "at": 0.25, "sx": 0.545, "sy": 0.591, "tx": -583, "ty": 1116 },
+        { "at": 0.5, "sx": 0.784, "sy": 0.806, "tx": -277, "ty": 529 },
+        { "at": 0.75, "sx": 0.941, "sy": 0.947, "tx": -76, "ty": 145 },
+        { "at": 1, "sx": 0.998, "sy": 0.998, "tx": -3, "ty": 6 }
+      ]
+    },
+    "close": {
+      "durationMs": 244,
+      "animations": 3,
+      "trajectory": [
+        { "at": 0, "sx": 0.395, "sy": 0.456, "tx": -73, "ty": -31 },
+        { "at": 0.25, "sx": 0.462, "sy": 0.524, "tx": -65, "ty": -28 },
+        { "at": 0.5, "sx": 0.643, "sy": 0.698, "tx": -43, "ty": -17 },
+        { "at": 0.75, "sx": 0.863, "sy": 0.89, "tx": -16, "ty": -6 },
+        { "at": 1, "sx": 0.993, "sy": 0.995, "tx": -1, "ty": 0 }
+      ]
+    }
+  }
+}
