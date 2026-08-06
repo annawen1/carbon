@@ -133,6 +133,15 @@ yourself. A composite (e.g. a modal that renders `<cds-button>` in its own
 shadow DOM) resolves those internal tags against the global registry — so to
 re-prefix a whole component tree, use the prefix build below.
 
+#### Defining your own custom elements
+
+Earlier versions exported a self-registering `carbonElement` decorator
+(`es/globals/decorators/carbon-element.js`) that consumers used to define their
+own elements. It is **deprecated and will be removed in `v3.0.0`** — use Lit's
+own `customElement` decorator, or the `static is` + `defineCustomElement`
+pattern above. See the
+[v3 migration guide](../../docs/guides/cwc-v3-migration.md#the-carbonelement-decorator-is-removed).
+
 #### Re-prefix the whole package (any prefix)
 
 To put every Carbon element — including the ones a composite renders internally
