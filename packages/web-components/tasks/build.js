@@ -221,7 +221,8 @@ async function postBuild() {
     }
 
     console.warn(
-      '⚠️  [deprecation] The `es-custom` build is deprecated and will be removed in v3.0.0 (replaced by user-controlled naming and scoped registries).'
+      '⚠️  [deprecation] The `es-custom` build is deprecated and will be removed in v3.0.0, in favor of user-controlled naming and scoped registries. ' +
+        'See https://github.com/carbon-design-system/carbon/blob/main/packages/web-components/README.md#re-prefix-the-whole-package-any-prefix.'
     );
   }
 }
