@@ -18,9 +18,7 @@
  * `@carbon/web-components` no longer self-registers its own components: classes
  * declare `static is = '${prefix}-name'` and registration is opt-in via
  * `defineCustomElement` (see `../register.js`). This `carbonElement` decorator
- * remains only so existing consumers that authored their own custom elements
- * with it keep compiling. It is a thin, unchanged copy of the pre-v3 decorator
- * and will be removed in v3.
+ * is deprecated and will be removed in v3.
  *
  * Migrate to either Lit's own decorator:
  *
@@ -94,7 +92,7 @@ const standardCustomElement = (
   return {
     kind,
     elements,
-    // This callback is called once the class is otherwise fully defined
+    // called once the class fully defined
     finisher(clazz: Constructor<HTMLElement>) {
       try {
         customElements.define(tagName, clazz);
@@ -113,7 +111,7 @@ const warnDeprecatedOnce = () => {
     return;
   }
   deprecationWarned = true;
-   
+
   globalThis.console?.warn(
     `[@carbon/web-components] the \`carbonElement\` decorator ` +
       `(es/globals/decorators/carbon-element.js) is deprecated and will be ` +
@@ -137,10 +135,8 @@ const warnDeprecatedOnce = () => {
  * }
  * ```
  *
- * @deprecated Removed in v3. Use Lit's `customElement`
- *   (`import { customElement } from 'lit/decorators.js'`) or the pure-class
- *   `static is` + `defineCustomElement` model from
- *   `@carbon/web-components/es/globals/register.js`. Migration guide:
+ * @deprecated Removed in v3
+ *   Migration guide:
  *   https://github.com/carbon-design-system/carbon/blob/main/docs/guides/cwc-v3-migration.md#the-carbonelement-decorator-is-removed
  * @category Decorator
  * @param tagName The tag name of the custom element to define.
