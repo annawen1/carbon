@@ -8,40 +8,19 @@
 /**
  * Public registration API for `@carbon/web-components`
  *
- * Carbon's component classes are side-effect free: importing a class does not
- * register it. Registration is opt-in by the user, performed with
- * `defineCustomElement`. Carbon's auto-registering barrels
- * (`@carbon/web-components/es/components/<name>`) call this automatically with the
- * default `cds-` tag names, so common use cases need nothing extra.
- *
- * To register a component under a custom tag name - i.e. to avoid a
- * collision with another library that already defines `cds-button` - import the
- * pure class and register it yourself:
- *
- * ```js
- * import CDSButton from '@carbon/web-components/es/components/button/button.js';
- * import { defineCustomElement } from '@carbon/web-components/es/globals/register.js';
- *
- * defineCustomElement(CDSButton, { name: 'cwc-button' }); // <cwc-button>
- * ```
- *
- * Note: a custom element constructor can only be registered once per registry,
- * so use the custom-name path with the pure class import rather than the
- * auto-registering barrel (which already defines the default name).
+ * Component classes are side-effect free; importing a class does not
+ * register it. Registration is opt-in, using `defineCustomElement`.
+ * By default, Carbon web components auto-register via their import barrels.
  */
 
 /**
- * Custom element constructor that carries the registered tag name
- * as a static `is` property
- *
- * Carbon component classes declare `static is = '${prefix}-name'` instead of
- * baking the tag name into a self-registering decorator. This keeps the class
- * modules pure (no side-effects) and importing a class no longer registers it
+ * Custom element constructor that carries the registered tag name as a
+ * static `is` property instead of baking the tag name into a decorator.
  */
 export interface CarbonCustomElementConstructor
   extends CustomElementConstructor {
   /**
-   * The tag name this element should be registered under
+   * the tag name this element registers under
    */
   is: string;
 }
@@ -51,47 +30,56 @@ export interface CarbonCustomElementConstructor
  */
 export interface DefineCustomElementOptions {
   /**
-   * The tag name to register under. Defaults to the class's static `is`
+   * The tag name to register under. Defaults to the class's static `is`.
+   * Pass custom name to avoid global-registry collisions.
    *
-   * Pass custom name to avoid global-registry collisions, e.g.
-   * `defineCustomElement(CDSButton, { name: 'cwc-button' })`
+   * ```js
+   * import CDSButton from '@carbon/web-components/es/components/button/button.js';
+   * import { defineCustomElement } from '@carbon/web-components/es/globals/register.js';
+   *
+   * // <cwc-button>
+   * defineCustomElement(CDSButton, { name: 'cwc-button' });
+   * ```
    */
   name?: string;
   /**
-   * The registry to define the element in. Defaults to the global
-   * `customElements`.
+   * A custom registry to define the element in. Defaults to the global
+   * `customElements`. Pass a scoped `CustomElementRegistry` to keep registration
+   * out of global namespace.
    *
-   * Pass a scoped `CustomElementRegistry` (created with
-   * `new CustomElementRegistry()` and attached to a shadow root via
-   * `attachShadow({ customElementRegistry })`) to isolate registration from
-   * global namespace — e.g. to run multiple versions, or a different
-   * prefix, of Carbon elements on the same page without collisions. Requires
-   * native support (Firefox 150+) or the
-   * `@webcomponents/scoped-custom-element-registry` polyfill.
+   * ```js
+   * import CDSButton from '@carbon/web-components/es/components/button/button.js';
+   * import { defineCustomElement } from '@carbon/web-components/es/globals/register.js';
+   *
+   * // Requires native support or the
+   * // `@webcomponents/scoped-custom-element-registry` polyfill.
+   * const registry = new CustomElementRegistry();
+   * defineCustomElement(CDSButton, { registry });
+   *
+   * // <cds-button> resolves to this registry, not the global one
+   * host.attachShadow({ mode: 'open', customElementRegistry: registry });
+   * ```
    */
   registry?: CustomElementRegistry;
 }
 
 /**
- * Register a custom element class, under `options.name` (or its static `is` by
- * default) in `options.registry` (or the global `customElements` by default).
+ * Register a custom element class, under `options.name` in `options.registry`.
  * Called by the registering barrels so importing a class stays pure.
  *
- * Re-registering the same class under the same tag is an idempotent no-op (barrels
- * rely on this). If the tag is already claimed by a different class, i.e. two
- * copies of Carbon on the page, the first definition wins and a warning is
- * emitted in development.
+ * Re-registering the same class under the same tag is a no-op. If the tag is
+ * registered by a different class, i.e. two copies on the same page, the first
+ * definition wins and a warning is emitted in development.
  *
- * A class may only be registered once per registry, so if the tag is free but
- * `clazz` is already registered under another name (a custom-name call after the
- * default tag was defined), a fresh subclass is registered under the new name
- * instead. Elements of that tag remain `instanceof clazz` (a subclass is-a its
- * base), and the returned class is the one that upgrades.
+ * Classes can only be registered once per registry. If the tag is free but
+ * `clazz` is already registered under another name, e.g. a custom name call
+ * after the default tag was defined, a subclass is registered under the new name
+ * instead as `instanceof clazz`.
  *
  * @param clazz The custom element class to register
  * @param options Registration options
- * @returns The registered class, for convenient re-export. This is `clazz`
- *   itself, except in the subclass case above, where it is the subclass that was
+ * @returns The registered class, for re-export. This is `clazz` itself,
+ *   except in the subclass case above, where it is the subclass that was
  *   actually registered under `options.name`.
  */
 export const defineCustomElement = <T extends CarbonCustomElementConstructor>(
@@ -107,10 +95,8 @@ export const defineCustomElement = <T extends CarbonCustomElementConstructor>(
   const existing = registry.get(name);
 
   if (existing) {
-    // The tag is already defined. Re-defining with the same class is an
-    // idempodent no-op. A different class means two copies of Carbon are fighting
-    // for the tag: the first definition wins and components can mix versions,
-    // so let users know.
+    // Tag already definied, redefining with same class is a no-op. If more than
+    // one copy fights for tag the first definition wins
     if (existing !== clazz && process.env.NODE_ENV === 'development') {
       globalThis.console?.warn(
         `[@carbon/web-components] <${name}> is already defined by a different ` +
@@ -123,11 +109,10 @@ export const defineCustomElement = <T extends CarbonCustomElementConstructor>(
     return clazz;
   }
 
-  // The tag name is free, but a class may only be registered once per registry.
-  // If `clazz` is already registered under another name — e.g. the barrel
-  // defined its default `cds-` tag before this custom-name call — `define()`
-  // throws a `NotSupportedError`. Register a fresh subclass under the new name
-  // instead, so the custom name works. Elements stay `instanceof clazz`.
+  // Tag name is free, but a class can only be registered once per registry.
+  // If `clazz` is already registered under another name, e.g. default `cds-`,
+  // `define()` throws `NotSupportedError`. Register new subclass under new
+  // name instead, so the custom name works. Elements stay `instanceof clazz`.
   try {
     registry.define(name, clazz as unknown as CustomElementConstructor);
   } catch (error) {
@@ -139,7 +124,7 @@ export const defineCustomElement = <T extends CarbonCustomElementConstructor>(
     }
 
     const ScopedElement = class extends (clazz as unknown as CustomElementConstructor) {};
-    // Keep the static `is` in sync with the tag it was actually registered under.
+    // keep static `is` in sync with the tag is was registered under
     Object.defineProperty(ScopedElement, 'is', { value: name });
     registry.define(name, ScopedElement);
     return ScopedElement as unknown as T;
