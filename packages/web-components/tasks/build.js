@@ -9,6 +9,7 @@
 
 import { fileURLToPath } from 'url';
 import { globby } from 'globby';
+import { reporter } from '@carbon/cli-reporter';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import fs from 'fs-extra';
@@ -220,8 +221,8 @@ async function postBuild() {
       await fs.promises.appendFile(registerFile, notice);
     }
 
-    console.warn(
-      '⚠️  [deprecation] The `es-custom` build is deprecated and will be removed in v3.0.0, in favor of user-controlled naming and scoped registries. ' +
+    reporter.warn(
+      'The `es-custom` build is deprecated and will be removed in v3.0.0, in favor of user-controlled naming and scoped registries. ' +
         'See https://github.com/carbon-design-system/carbon/blob/main/packages/web-components/README.md#re-prefix-the-whole-package-any-prefix.'
     );
   }

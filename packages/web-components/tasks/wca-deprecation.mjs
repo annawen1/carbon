@@ -11,6 +11,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { reporter } from '@carbon/cli-reporter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const file = path.resolve(__dirname, '..', 'custom-elements.json');
@@ -31,6 +32,6 @@ fs.writeFileSync(
   JSON.stringify({ _deprecated: deprecated, ...manifest }, null, 2) + '\n'
 );
 
-console.warn(
-  '⚠️  [deprecation] custom-elements.json (WCA format) is deprecated and will be removed in v3.0.0, in favor of the standard Custom Elements Manifest (CEM). See https://github.com/carbon-design-system/carbon/issues/20670.'
+reporter.warn(
+  'custom-elements.json (WCA format) is deprecated and will be removed in v3.0.0, in favor of the standard Custom Elements Manifest (CEM). See https://github.com/carbon-design-system/carbon/issues/20670.'
 );
